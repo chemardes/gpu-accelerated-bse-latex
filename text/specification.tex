@@ -1,0 +1,44 @@
+This final year is supervised by Dr Pantelis Sopasakis and will be moderated by Dr Michael Cregan. The original title was ``Design and construction of a radio-controlled quadcopter.''
+The project involves control theory, software development, signal processing, embedded development and aerodynamics.
+
+\section*{Problem statement}
+\begin{minipage}[t]{0.4\textwidth}\vspace{0em}
+    \centering
+    \includegraphics[width=0.98\textwidth]{figures/specification_image.png}
+\end{minipage}
+\begin{minipage}[t]{0.595\textwidth}\vspace{0em}
+A quadcopter is a four-rotor helicopter\footnote{see \url{https://en.wikipedia.org/wiki/Quadcopter}}. By changing the thrust of its four propellers, quadcopters can pitch, roll, rotate around their vertical axis, ascend, descend and even perform flips and more elaborate manoeuvres and acrobatics. The main objective of this project is to design and build a quadcopter from scratch, which involves hardware, software and design tasks.
+\end{minipage}
+
+\section*{Objectives}
+In this final year project the student will:
+\begin{enumerate}
+    \setlength\itemsep{-0.5em}
+    \item Study and understand the dynamical equations that govern the attitude dynamics of a quadcopter.
+    \item Design appropriate attitude and thrust controllers (e.g., PID and/or \acs{LQR}).
+    \item Build an \ac{AHRS} for the quadcopter using an inertial measurement unit and implementing a Kalman filter.
+    \item Build a quadcopter (mount the four rotors on the quadcopter's frame, connect them to ESCs and to a microcontroller or single-board computer, mount the battery and the receiver); the frame can be laser-cut. 
+    \item Implement an attitude control system.
+    \item Fly the quadcopter using the radio controller.
+\end{enumerate}
+\textbf{Note: } the student will not have to build the radio controller herself.
+
+\subsection*{MEng Extension}
+\begin{enumerate}
+    \setlength\itemsep{-0.5em}
+    \item Implement altitude hold and loitering controllers (so that the quadcopter can retain a constant altitude)
+    \item Build an on-board localisation system
+\end{enumerate}
+
+\section*{Learning Outcomes}
+Upon completion of the project you will expect to:
+\begin{enumerate}
+    \setlength\itemsep{-0.5em}
+    \item have an excellent understanding of how quadcopters work, including certain details about their aerodynamics.
+    \item be able to design control and estimation systems for quadcopters (especially LQR and Kalman filters).
+    \item perform simulations of dynamical systems in either MATLAB or Python.
+    \item have developed strong embedded programming skills.
+    \item have become familiar with LiPo battery charging.
+    \item be able to operate a small drone using an appropriate RC.
+    \item be able to integrate different systems involving hardware and software components.
+\end{enumerate}

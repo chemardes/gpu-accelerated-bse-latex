@@ -1,0 +1,39 @@
+\section{Assessment of achievements}
+This project set out to achieve: \textbf{(i)} the design and implementation of a multirotor attitude control system using an \ac{LQR} controller, and an \ac{AHRS} using a 9 \ac{DoF} \ac{IMU} and a \ac{KF} state estimator, and \textbf{(ii)} the design, build and test flight of a viable tilting-wings and tilting-rotors quadrotor.
+
+The specification outcomes of completing those two achievements were that I would:
+\begin{enumerate}
+    \item have an excellent understanding of how quadcopters work, including certain details about their aerodynamics. \\$\rightarrow$ \textcolor{green!80!black}{Complete}, see Section \ref{sec:aerodynamics}. In particular, I used quaternion-based equations of motion of the quadrotor along with the aerodynamics equations to model the voltage-to-thrust dynamics and the reaction wheel effect.
+    \item be able to design control and estimation systems for quadcopters (especially LQR and Kalman filters). \\$\rightarrow$ \textcolor{green!60!black}{Complete}, see Section \ref{sec:control_and_estimation}. Specifically, I studied the theory of linear-quadratic optimal control and optimal estimation for linear systems, and applied it to a linearisation of the model created above; I became familiar with the tuning parameters, usually denoted $Q$ and $R$, of the said control and estimation systems' optimisation problems.
+    \item perform simulations of dynamical systems in either MATLAB or Python. \\$\rightarrow$ \textcolor{green!60!black}{Complete}, see Section \ref{sec:simulations}, where I developed a detailed and realistic simulator in Python (part of the Deadcopter library).
+    \item have developed strong embedded programming skills. \\$\rightarrow$ \textcolor{green!60!black}{Complete}, see Section \ref{sec:software}, where I implemented the above control and estimation systems in a header-only Arduino library, which is C++ (but implemented more as C with classes). This involved creating classes, polling input pins, extensive debugging, and investigating the limits of the Arduino Due in terms of modifying interrupt service routine priorities.
+    \item have become familiar with LiPo battery charging. \\$\rightarrow$ \textcolor{green!60!black}{Complete}, see Section \ref{sec:lipo_battery}. In particular, the methods and benefits of keeping a battery healthy, and the potentially destructive dangers of overcharging.
+    \item be able to operate a small drone using an appropriate radio controller and be able to integrate different systems involving hardware and software components. \\
+    $\rightarrow${} 
+    \textcolor{green!60!black}{Complete (not tested)}, see Section \ref{sec:limitations_and_further_developments} and Specification Objectives 4, 5 and 6 in Section \ref{sec:progress_review}. This involved extensive integration of hardware components, and just as extensive integration of the hardware components with the software; tasks such as building and printing the wings to fit on the frame, extending the frame legs to accommodate the wings, profiling graphite spars for mounting the motors, integrating the \fnstt{Servo} and \fnstt{DueTimer} libraries to work with my custom-made PPM deciphering function and controlling the ESCs with the \fnstt{Servo} library to name a few. Further work involved tasks such as interpreting data from an IMU and troubleshooting the radio transmitter and receiver with an oscilloscope. If the project was to be repeated, I would choose to spend more of the budget on a reliable and robust controller, and a receiver with a serial output.
+\end{enumerate}
+There were many other outcomes in addition to these, such as learning the quaternion number system, modelling linear \ac{MIMO} dynamical systems, gaining in-depth knowledge of the \ac{PWM} and \ac{PPM} protocols, how to simulate system and measurement noise, general DIY skills, 3D \ac{CAD} and printing skills, using code libraries in Python and C/C++, implementing a code generator using Jinja2, designing and building test benches, managing project progress and software using IT (e.g., Git, issue trackers and pull requests), researching the market, and very importantly, conducting risk assessments. Having gained all of this knowledge and these skills, I will be better informed and more useful in all future projects.
+
+
+
+
+
+
+
+
+\section{Limitations and further developments}\label{sec:limitations_and_further_developments}
+There was one main limitation on this project; space. The lack of a suitably safe lab space for conducting further physical tests meant I was unable to test fly the quadrotor in order to complete testing. At the beginning of the project, I extended the specification to a more ambitious one, which made for an intensive, yet rewarding, year. Given more time and test space, the following tasks would be carried out, in this particular order:
+\begin{enumerate}
+    \item Create unit and integration tests for Python scripts and generated Arduino code.
+    \item Develop code generator to filter multiplications by zero out of the flight controller calculations.
+    \item Design and build robust container that bolts onto frame to hold the avionics, servos and battery.
+    \item Test fly quadrotor and investigate flight characteristics in both quadcopter and aeroplane mode.
+    \item Refactor Deadcopter and release the first version on pypi.org (so that people can install it with: pip install deadcopter).
+    \item Implement a black box: a data logger on an on-board SD card.
+\end{enumerate}
+
+Additionally, in light of Amazon.com, Inc. winning approval for their ``Prime Air'' drone delivery fleet last year \cite{amazon}, I would investigate the following ideas which are based on increasing payload capability and flight range.
+\begin{itemize}
+    \item A slingshot-type drone launcher to enable a larger-than-maximum vertical take-off weight payload when launching drone so that wing lift is provided from the start and only very short runways are needed. After payload is delivered, aircraft weight will be reduced so that vertical take-off is possible from the delivery point.
+    \item Wing extensions are pulled open before launch to give maximum lift during outbound flight, then springs will pull extensions back in after payload delivery to reduce drag for inbound journey as less lift is required. The springs are actuated by a solenoid after delivery.
+\end{itemize}

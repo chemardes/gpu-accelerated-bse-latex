@@ -1,0 +1,83 @@
+\section{GitHub repository}\label{sec:github_repository}
+A GitHub repository is used for safe storage of the project software, to prevent loss and corruption. This also means the software is accessible anywhere, changes are tracked, pull requests can be reviewed, and all the code from different languages are stored in one place for ease of use. Most importantly, GitHub makes the software package open-source because the repository is public \cite{deadcopter}.
+
+
+
+
+
+
+
+
+\section{Software overview}
+A typical use case of the Deadcopter Python module is that the end user wants to design a stabilising flight controller for a quadrotor. They first need to provide the values of the parameters given in Tables \ref{tab:params-1}, \ref{tab:params-3} and \ref{tab:params-2} and the controller and KF weight matrices ($Q_{\rm{lqr}}$, $R_{\rm{lqr}}$, $Q_{\rm{Kf}}$, $R_{\rm{Kf}}$) so that Deadcopter can perform realistic closed-loop simulations. If the user is content with the result, they can generate C code for the flight controller that can be directly flashed to an Arduino. All this can be done in very few lines of code.
+
+Figure \ref{fig:software_overview} is a diagram of the layout of the files on GitHub. The project simulator is written in Python because it is free and can host a templating language, Jinja2, unlike other software such as MathsWorks MatLab. The \fnstt{sim.py} file runs the simulator which uses two classes, \fnstt{copter.py} and \fnstt{simulator.py}.
+
+A Jinja2 script takes the parameters provided in it and puts each in its predefined place(s) in the code templates (which are written beforehand). This generates a custom code file tailored with the provided parameters. There are many features that can be used in the code templates, such as `for' and `if' statements, which makes printing many similar lines of code to the generated file (and choosing what is printed) much faster and easier than trying to print the statements yourself.
+
+The code generator is written using Jinja2 in Python because it is free, fast, easy to use, versatile, feature rich and most importantly, strongly documented. The \fnstt{jinja$\_$create.py} file runs the code generator which uses the templates within the Jinja2 folder to auto generate a header-only Arduino library. 
+
+Several open-source third party Arduino libraries are used in the generated library. These are listed under \fnstt{Libraries}, where the dashed grey arrows indicate what files they are used in. Some of these libraries have been modified, such as MadgwickAHRS to make the filter function return a quaternion. These modified libraries are included in the repository.
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/software_overview.pdf}
+    \caption{Illustrative layout of the software files on GitHub, where solid lines connect files in the same folder and arrows describe file dependencies.}
+    \label{fig:software_overview}
+\end{figure}
+
+
+
+
+
+
+
+
+\section{Application programming interfaces (APIs)}
+Deadcopter offers a simple \ac{API} that manages to conceal all the technicalities we discussed in Chapter \ref{sec:rotations} behind two sub-APIs: the simulator API and the code generation API. Deadcopter's design is both intuitive and well-documented.
+
+
+
+\subsection{Simulator API}
+Listing \ref{lis:run_sim} shows where the user can provide their \ac{UAV} parameters such as size, weight, propeller diameter and so on. The focus of the \ac{API} is user-friendly and so the design is plain, simple and  easy to use.
+\begin{listing}[htpb!]
+\inputminted[frame=lines,
+framesep=2mm,
+baselinestretch=1.2,
+bgcolor=White,
+fontsize=\scriptsize,
+linenos]{python}{listings/run_sim.tex}
+\caption{Simulator \ac{API}: well documented list that allows users to provide their \ac{UAV} parameters.}
+\label{lis:run_sim}
+\end{listing}
+    
+
+
+
+
+
+
+
+
+\subsection{Code generator API}
+The code generator starts in \fnstt{jinja\_create.py} with the same \ac{API} layout as in the simulator, with the addition of one more parameter; the refresh rate of the flight controller. The \ac{API} then continues further down in \fnstt{jinja\_create.py} to allow the user to change hardware connections, e.g., what pin is used for the receiver input on the Arduino board.
+
+
+
+
+
+
+
+\section{Arduino Integrated Development Environment (IDE)}
+The code generator outputs an Arduino library folder that can be opened in the Arduino \ac{IDE}. Once open, the Due board is selected from: \fnstt{Tools} $\rightarrow$ \fnstt{Board}. The board is connected and the COM/tty port is selected from \fnstt{Tools} $\rightarrow$ \fnstt{Port}. The library is then uploaded to the board: \fnstt{Sketch} $\rightarrow$ \fnstt{Upload}. When starting or resetting the board, the \ac{IMU} should be held steady until the orange LED on the Arduino board starts flashing. The LED toggles at 1 \si{\hertz}.
+
+
+
+
+
+
+
+
+\section{Interrupt Service Routines (ISRs)}
+An ISR is a code block that is run almost immediately after its specific interrupt condition becomes true. The alternative to an ISR is \textit{polling} a specific condition; checking the condition during each run of the main code loop (which means the execution of the code block could be delayed if the main loop is delayed). For implementing multiple ISRs, the Arduino Due's many features include the ability to prioritise ISRs (if two ISR conditions are true at the same time, the priority assigned to each ISR determines which one happens ``immediately''. However, there is little, if any, documentation on this feature.
+
+That said, this project uses two ISRs of equal priority: one to decipher the \ac{PPM} signal from the radio receiver because this code block must run ``immediately'' when its condition becomes true, and one to flag when the \ac{IMU} data needs to be read. The flag is polled in the main code loop, and the buzzer connected to the Due is sounded if the main loop is delayed meaning the IMU data is not being read at the correct rate. The ISRs execution times are kept below 10 \si{\micro\second} to ensure the event of their conditions being true at the same time has a negligible effect overall.

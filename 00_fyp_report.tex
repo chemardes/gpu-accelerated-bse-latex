@@ -1,0 +1,113 @@
+\documentclass[a4paper,12pt]{report}
+
+\input{preamble}
+
+\begin{document}
+    \begin{titlepage}
+    \thispagestyle{empty}
+    \begin{center}
+        {Queen's University Belfast}\\[0.4cm]
+        {School of Electronics, Electrical Engineering and Computer Science}\\[1cm]
+        \hbox{}\hfill
+        \begin{minipage}[t]{\textwidth}
+        \begin{center}
+            \includegraphics[width=0.5\textwidth]{figures/logo.jpg}
+        \end{center}
+        \end{minipage}
+        \hfill\hbox{}
+        \\[3cm]
+        {\large BSc (Hons) Final Year Project Report\\[0.3cm]}
+        {\LARGE \bfseries \biolinum GPU-Accelerated Solution for the Black-Scholes equation \\[3cm]}
+        {\large Chelsea De Marseilla, 40329124}\\[0.4cm]
+        {\large \today}
+    \end{center}
+    \vspace*{\fill}
+    \begin{minipage}[t]{0.48\textwidth}
+        {Supervisor:}\\[0.3cm]
+        {\large Dr P. Sopasakis}\\[0.1cm]
+        School of EEECS
+    \end{minipage}
+    \hfill
+\end{titlepage}
+
+
+\clearpage
+\setcounter{page}{0}
+
+\newpage
+\pagenumbering{roman}
+\chapter*{Abstract}
+\input{text/00_abstract}
+
+\pagebreak
+\tableofcontents
+\pagebreak
+
+
+
+\pagenumbering{arabic}
+
+\chapter{Problem statement}
+% ~2 PAGES
+% Objectives (hi-level, specific), blah
+% O1. Understand the intimate relationship between the BSE and the heat equation and implemnet a solver for the BSE based on the heat equation (the motivation is that we will then be able to use widely available solvers for the heat equation to solve the BSE) + verify correctness
+% O2. Use the GBM to perform MC simulations and evaluate the behaviour of BS-based option pricing in realistic conditions
+% O3. GPU parallelisation of numerical methods and measurement of speed-up (what exactly will be parallelised: BOTH numerical mehtods for PDEs AND GBM)
+
+
+\chapter{Derivatives and Option Pricing: Literature Review}
+% BACKGROUND
+\label{sec:literature}
+\input{text/02_literature_review.tex}
+
+\chapter{From the heat equation to Black-Scholes: Theory and Algorithms}\label{sec:theory_and_background}
+\input{text/03_theory_background.tex}
+   
+\chapter{Software}\label{sec:software}
+% HERE: we just present:
+% 1. What the SW does (not how)
+% 2. What guarntees the user has that it works (tests), incl. CI
+% 3. The fact that it is easy to use
+% 4. Convince the reader that the SW is professionally made (e.g., good docs) 
+%
+% Requirements (what do we want the SW to do)
+% SW structure (Python code, classes, CUDA, etc)
+%   L  Mini code snippets (not CODE!), e.g., via diagrams
+%   L  Link to GH repo
+% GitHub Actions (explain what tests)
+%   L  Code coverage (?)
+%   L  WHAT is being tested? 
+%   L  Unit test: boundary/initial conditions
+% Other information:
+%   L  Licence
+
+
+\chapter{Simulations}\label{sec:simulations}
+% Alt. title: R E S U L T S
+% The idea is that you have used the software to solve many problems
+% and you're presenting the results...
+%
+% 1. Heat equation
+% 2. BSE with different solvers (say you got the same solutions)
+% 3. Speed-up with GPU solver
+%      L  Dolan-Moré plot
+% 4. Geom. Br. Motion results (plots)
+
+\chapter{Conclusions}\label{sec:conclusions}
+% \chapter{Results \& Discussion}\label{sec:results_and_discussion}
+% \input{text/05_results_discussion}
+        
+% \chapter{Conclusions \& Future Work}\label{sec:conclusions_and_futurework}
+% \input{text/06_conclusions_futurework}       
+
+
+\pagebreak
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% \pagebreak
+% \appendix
+% \input{text/07_appendices}
+
+
+\end{document}          

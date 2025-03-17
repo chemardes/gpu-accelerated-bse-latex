@@ -1,0 +1,35 @@
+\section{Introduction to Derivatives and Option Pricing}
+Over the years, derivatives trading has emerged as a fundamental component of modern finance,
+evolving into a widespread practice across global financial markets. This shift in market dynamics
+introduces a challenge in determining the fair value (price) of derivative products, and in turn,
+ensure a balanced outcome for both the buyer and the seller.
+
+A \textit{financial derivative} is primarily known as a financial instrument whose value depends on the
+values of more basic underlying variables \cite{hull_2021_options}. These derivatives come in many forms,
+with examples such as \textit{futures contracts, options, and swaps}, each typically derived from the prices of
+the traded assets. An \textit{option} is a derivative security which gives the holder the right (but not the obligation) 
+to purchase or sell an underlying asset at a certain price by a predetermined time. The holder may decide to buy or sell
+the purchased option based on whether the conditions are favourable to them; if not, they may choose to let the option expire worthless. 
+Knowing this definition of an option, it can be divided into two different types: \textit{call} or \textit{put} options. A simple \textit{call} option 
+is a contract that gives the holder the right to buy an asset at an agreed price by a specified time. A simple \textit{put} 
+option, on the other hand, is a contract that gives the holder the right to sell an asset at an agreed price by a specified time.
+The price at which the option can be exercised is known as the \textit{exercise} or \textit{strike} price, and the date on which
+the option needs to be exercised by is the \textit{expiration} date or \textit{maturity}. Typically, an option is exercised only at
+its expiration time\textemdash these are known as \textit{European} options. Otherwise, it is considered an \textit{American} option
+which allows the holder to exercise the option prior to its expiration.
+\subsubsection{Example of a Call Option} 
+Suppose a European call option for 100 shares of NVIDIA stock is created with a strike price of \$100 and an expiration date in one month. 
+The price of an option for each individual share of the stock is \$8, making the initial investment a total of \$800. If, in one month's time,
+the stock falls below the strike price (\$100), it would be unfavourable for the holder to exercise the option, as it would then be worthless.
+The holder then loses their initial investment of \$800. In the favourable case where the stock rises to a price of \$120 at expiry, the option
+will be exercised. Here, the holder buys 100 shares of the stock at the agreed strike price (\$100). Selling their stocks immediately would 
+lead to a gain of \$2000, and a net profit of \$1200 (taking into account the initial investment).
+\subsubsection{Example of a Put Option}
+A put option has the reverse effect of a call option. Consider a situation where a European put option is purchased with a strike price of
+\$30 to sell 100 shares of Intel stock. The option is set to expire in 2 months and the price of an option per share is \$5. This makes an initial
+investment of \$500. Suppose that the price of the stock falls to a value of \$18 at expiry, the holder chooses to exercise the option and purchases 100
+shares of Intel stock at \$18. The holder then sells the shares at the agreed strike price, realizing a profit gain of \$1200 and a net profit of \$700.
+However, if the current market price rises above the strike price at expiry, the holder generally does not exercise the option, suffering a loss 
+of \$500.
+
+\subsection{The Black-Scholes model}

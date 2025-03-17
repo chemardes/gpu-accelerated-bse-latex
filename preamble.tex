@@ -1,0 +1,124 @@
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathrsfs,mathtools}
+\usepackage{cancel}
+\usepackage{bm}
+\usepackage[table,svgnames, dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+    \setlength{\headheight}{14.5pt}
+\usepackage{minted}
+% \usemintedstyle{borland}
+% \usepackage[minted]{tcolorbox}
+%     \newtcblisting{mylisting}{listing only,listing engine=minted, minted language=py, minted style=borland,colback=gray!20}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{pgfgantt,pgfplotstable}
+\usepackage{framed}
+\usepackage{enumerate}
+\usepackage{lscape}
+% \usepackage{siunitx}
+\usepackage{units}
+\usepackage[T1]{fontenc}
+\usepackage{libertine}
+\usepackage{sectsty}
+    \allsectionsfont{\biolinum}
+    
+% --- Let us remove soul to make sure we don't use \st anywhere...    
+% \usepackage{soul}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\pgfplotsset{compat=1.18}
+
+% \lstdefinestyle{mystyle}{
+% 	backgroundcolor=\color{backcolour},   
+%     commentstyle=\color{codegreen},
+%     keywordstyle=\color{magenta},
+%     numberstyle=\tiny\color{codegray},
+%     stringstyle=\color{codepurple},
+%     emph={mass,arm_length,K_v,voltage_max,voltage_min,prop_diameter_in},  % Custom highlighting
+%     emphstyle=\color{codepurple},  % Custom highlighting style
+%     basicstyle=\ttfamily\footnotesize,
+%     breakatwhitespace=false,         
+%     breaklines=true,                 
+%     captionpos=b,                    
+%     keepspaces=true,                 
+%     numbers=left,                    
+%     numbersep=5pt,                  
+%     showspaces=false,                
+%     showstringspaces=false,
+%     showtabs=false,                  
+%     tabsize=2
+% }
+
+% \lstset{style=mystyle}
+
+% \numberwithin{equation}{section}
+% \synctex=1
+
+\setlength{\parindent}{0pt}  
+\setlength{\parskip}{8pt}
+
+\hypersetup{
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar
+    pdfmenubar=true,        % show Acrobat’s menu
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdfnewwindow=true,      % links in new PDF window
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+    citecolor=blue,         % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\urlstyle{same}
+
+\usepackage{geometry}
+% \linespread{1.5}
+\geometry{
+	a4paper,
+	left=25mm,
+	right=25mm,
+	top=25mm,
+	bottom=25mm,
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+
+% Custom commands
+% \newcommand{\commentPS}[1]{{\color{green!70!black}#1}}
+% \newcommand{\commentRM}[1]{{\color{red!70!black}#1}}
+% ---- Let us deactivate all comments... ---
+\newcommand{\commentPS}[1]{}
+\newcommand{\commentRM}[1]{}
+% ------------------------------------------
+
+
+% --- Definitions -------------------
+\newcommand{\R}{{\rm I\!R}}
+\newcommand{\E}{{\rm I\!E}}
+\newcommand{\N}{{\rm I\!N}}
+\newcommand{\Hamilton}{{\rm I\!H}}
+\newcommand{\q}{\mathfrak{q}}
+\newcommand{\p}{\mathfrak{p}}
+\newcommand{\smallmat}[1]{\left[ \begin{smallmatrix}#1 \end{smallmatrix} \right]}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\newcommand{\minimise}{\operatorname*{Minimise}}
+\newcommand{\fnstt}[1]{{\texttt{\footnotesize #1}}}
+\newcommand{\ttop}{{\scalebox{.75}{$\scriptscriptstyle \top$}}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\dfn}{\mathrel{\mathop:}=}
+\newcommand{\NN}{\mathcal{N}}
+
+% --- Acronyms ---
+\usepackage{acronym}

@@ -1,0 +1,178 @@
+\section{Electrical schematic}
+The electrical schematic for the quadrotor is displayed on the next page in Figure \ref{fig:elec_schematic}.
+
+\section{Hardware overview}
+A list of the hardware used with unit costs can be found in Appendix \ref{app:parts_list}. Figure \ref{fig:hardware_overview} illustrates the connections between the quadrotor parts, where the purple arrows represent important physical connections, the red arrows represent electrical power, and the green arrows represent data line connections. It is important that the \ac{IMU} board is positioned as close to the \ac{CoM} of the aircraft as possible, in order to affect the accelerometer measurements the least \cite{basicairdata2011imu_placement}.
+
+\begin{landscape}
+\begin{figure}
+    \centering
+    \includegraphics[trim=30 230 200 100, clip, width=\linewidth]{figures/fyp_schematic.pdf}
+    \caption{Full electrical schematic which illustrates the electrical connections between the avionics. For reference: PC $\rightarrow$ personal computer, LLC $\rightarrow$ logic level converter, IMU $\rightarrow$ inertial measurement unit, ESC $\rightarrow$ electronic speed controller, Buzz $\rightarrow$ buzzer, V.Regulator $\rightarrow$ voltage regulator, Receiver $\rightarrow$ radio receiver.}
+    \label{fig:elec_schematic}
+\end{figure}
+\end{landscape}
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/hardware_overview.pdf}
+    \caption{Hardware overview diagram, illustrating the physical (purple), electrical (red) and data (green) connections between quadrotor parts.}
+    \label{fig:hardware_overview}
+\end{figure}
+
+
+
+
+\section{Lithium Polymer (LiPo) Batteries}\label{sec:lipo_battery}
+\ac{LiPo} batteries are now the most popular choice for anyone in the radio control industry looking for high power and long run times. However, they have their disadvantages: relatively short lifespans, sensitive chemical makeup that can lead to a fire or explosion if the battery gets punctured, and special care is required when charging, discharging, and storing \cite{lipo}. \ac{LiPo} batteries have three main ratings: cell count (which determines the output voltage), capacity (which determines the maximum amount of power that can be safely stored --- measured in milliAmp hours (\si{\milli\ampere\hour})), and discharge rate (which determines maximum safe continuous discharge current --- measured in multiples of that particular battery's Capacity (C)).
+
+As the cells in a \ac{LiPo} battery are generally connected in series, the number of cells in a battery is denoted by that number and an `S', e.g., 4S means four cells in series. The nominal (default or resting) voltage of a \ac{LiPo} cell is 3.7 \si{\volt}. Therefore, for a 4S battery, which is four cells in series, the nominal voltage is $3.7+3.7+3.7+3.7 = 14.8$ \si{\volt}. Likewise, the safe voltage range of a \ac{LiPo} cell is $3.0 \rightarrow 4.2$ \si{\volt}, and so the safe voltage range of a 4S battery is $12.0 \rightarrow 16.8$ \si{\volt}. Furthermore, to keep a battery healthy, it is advised to stop using cells when their voltage drops below $3.5$ \si{\volt}; thus, if flying an aircraft with a 4S battery, it is best to land when the voltage drops below $14$ \si{\volt} \cite{lipo_cell_voltages}.
+
+The best way to charge \ac{LiPo} batteries is to use a balance charger because it can monitor the voltage of, and individually charge, each cell. It is important to note that, unless clearly stated otherwise, a \ac{LiPo} battery should not be charged at a rate greater than 1C (Capacity); for a 4 \si{\ampere\hour} capacity battery, the charging current should be kept below 4 \si{\ampere} \cite{lipo_cell_voltages}.
+
+
+
+
+
+
+
+
+\section{Hardware design choices}\label{sec:design_choices}
+\subsection*{Frame Size} 
+A large frame size is used because the larger mass results in larger \acp{MoI}; making the system more innately stable due to a larger resistance to changes in rotation about its \ac{CoM}. At the same time, a larger frame means more real estate for accommodating the avionics, wings, servos and battery.
+
+The large frame also made it easier to modify and integrate with other parts, as the feet had to be sawn off and replaced with longer ones, and the wing and rotor mounts required many mounting holes.
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/frame_size.jpg}
+    \caption{Concept design of our quadrotor, using a large frame to hold the motor and wing spars.}
+    \label{fig:frame_size}
+\end{figure}
+
+
+
+\subsection*{(Tilting) Motors}
+The propulsion system is selected based off frame size and total craft weight. As a big frame size is used and heavy payload capability and long-range flight is expected --- large, low pitched and more efficient propellers are used --- requiring large, heavy and powerful motors \cite{bershadsky+2016choosing_propulsion}. The motors used are Turnigy 3730 1000 \si{\kilo\volt}, which are brushless, and so have relatively high efficiency and low maintenance. They have the ability to provide 1700 \si{\gram} of thrust, resulting in a large take-off weight. Their max current draw is 42 \si{\ampere}, which is important when choosing the \acp{ESC} and battery. 
+
+The motors are mounted on lightweight graphite rods that can be rotated using servos, in order to control the thrust vector produced. This transforms the quadcopter configuration into the more energy efficient aeroplane configuration that can benefit from producing lift with the wings.
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/motor.jpg}
+    \caption{A Turnigy 3730 1000 \si{\kilo\volt} motor that is mounted onto its modified graphite spar, which is held in the printed white plastic mount.}
+    \label{fig:motor}
+\end{figure}
+
+
+\subsection*{Electronic Speed Controllers (ESC)} 
+The \acp{ESC} have to be able to withstand the 42 \si{\ampere} draw of the motor with a safety margin, therefore, a 50A \ac{ESC} is used. Specifically, the Skywalker 50A Brushless ESC with 5V/5A BEC. \ac{ESC} branding and reviews are of paramount importance because \acp{ESC} are known to burn out during flight. These \acp{ESC} can be programmed themselves through their PWM input, for settings such as failsafe, which is detailed in the datasheet \cite{esc_datasheet}.
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/escs_on_frame.jpeg}
+    \caption{All four \acp{ESC} soldered to the built-in power distribution board on the frame.}
+    \label{fig:escs_on_frame}
+\end{figure}
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/esc.jpg}
+    \caption{The sticker on an \ac{ESC}: details the max current of the \ac{ESC} (50 \si{\ampere}), the compatible batteries (2-4S \ac{LiPo}) and the built-in universal battery eliminating circuit (UBEC) ratings (5\si{\volt}/5\si{\ampere}).}
+    \label{fig:esc}
+\end{figure}
+
+
+
+\subsection*{Battery}
+The chosen \acp{ESC} are compatible with a maximum of a 4S battery. During normal operation, the higher the voltage supply, the faster the motors can rotate, and so a 4S battery is used (see Section \ref{sec:lipo_battery}). A battery with a large capacity is used to provide the energy for long-range flight because the aircraft can afford the greater take-off weight. A large battery capacity for this application is 4000 \si{\milli\ampere\hour}. Like the ESCs, LiPo batteries are known to combust and sometimes explode, therefore branding and reviews are again of paramount importance. Since there are four ESCs drawing current from the battery, and each can draw 50A, the max discharge rate of the battery must be a minimum of $4 \times 50 = 200$ \si{\ampere}. The discharge current of a LiPo battery is rated in multiples of that battery's capacity, (C). Therefore, for a discharge current of 200 \si{\ampere} from a 4 \si{\ampere\hour} battery, a $200 \div 4 = 50$C rating is required. Hence, a Rhino 4000mAh 4S 50C battery is used in this project.
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/two_batteries.jpg}
+    \caption{Two types of 4000mAh 4S 50C batteries, with a voltmeter the yellow Rhino battery plugged into a voltmeter that is displaying the total voltage across all four cells.}
+    \label{fig:two_batteries}
+\end{figure}
+
+
+\subsection*{(Tilting) Wings} 
+The wings are custom made in-house from foam, with 3D printed extensions that can slide in and out of the foam wing for additional lift. Each wing has a 200 \si{\milli\meter} span and 100 \si{\milli\meter} chord length, with an additional 200 \si{\milli\meter} span with the extension. The wing profile is designed for high lift at low velocity \cite{Mcmasters+1979}.
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=0.49\textwidth]{figures/CAD_model.png}
+    \includegraphics[width=0.49\textwidth]{figures/wing_3d_printing.jpg}
+    \caption{3D CAD model of a wing extension on Fusion 360 and being printed on an Ender 3.}
+    \label{fig:wing_extension}
+\end{figure}
+
+The wings are rotated on the main spar by a small servo, in order to change them from their vertical position (quadcopter mode) for minimal disruption to airflow during take-off, to their horizontal position for efficient long-range flying using lift provided by the wings. This setup also allows for longer wing chord lengths for the same sized frame, as the wings do not interfere as much with the propellers. This is due to the wings rotating into the horizontal position after the front propellers have begun tilting forwards.
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/wing_assembly.jpg}
+    \caption{Quadrotor concept design showing wing spars: the front spar can rotate without changing position due to the pillow bearings holding it, and the back spar is moved by a servo to change the wings' angle of attack. Also note the custom white foam wings with printed red plastic extensions.}
+    \label{fig:full_quadrotor}
+\end{figure}
+
+
+
+\subsection*{Arduino Due}
+Arduino is used in this project because it is a well-known open-source brand so board quality and strong documentation is assured. The Arduino Due board is used as the flight controller in this project because of its high clock speed of 84 \si{\mega\hertz} and the large amount of PWM enabled digital Input/Output (I/O) pins which are needed for communicating with the ESCs and radio receiver. It is worth noting that the Due requires an input voltage (Vin) of 7-12 \si{\volt}, has 5 and 3.3 \si{\volt} regulators on board, and operates at a logic level of 3.3 \si{\volt}. The datasheet for the Atmel microcontroller on the Due is available online \cite{atmel_datasheet}. The datasheet for the Due is also available online \cite{due_datasheet}.
+
+\begin{figure}[htpb!]
+    \centering
+    \begin{tikzpicture}
+        \node [above right, inner sep=0] (image) at (0,0) {
+            \includegraphics[width=\textwidth]{figures/breadboard.jpg}
+        };
+        \begin{scope}[
+        x={($0.1*(image.south east)$)},
+        y={($0.1*(image.north west)$)}]
+            \draw[very thick,green] (1,2) rectangle (6.5,8) 
+                node[below left,black,fill=green]{\small DUE};
+            \draw[very thick,green] (6.7,4) rectangle (8,6) 
+                node[below left,black,fill=green]{\small IMU};
+            \draw[very thick,green] (8.2,4) rectangle (9.2,6) 
+                node[below left,black,fill=green]{\small LLC};
+            \draw[very thick,green] (3,0) rectangle (5,1.5) 
+                node[below left,black,fill=green]{\small RX};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Test bed for part of the avionics: the Arduino Due (DUE), the MPU9250 (IMU), the logic level converter (LLC) and the radio receiver antennas (RX --- the receiver is attached underneath the breadboard).}
+    \label{fig:breadboard}
+\end{figure}
+
+
+
+\subsection*{Inertial Measurement Unit (IMU)} 
+The IMU used in this project, shown in Figure \ref{fig:breadboard} is the widely used MPU9250 \cite{} which is a 9-axis \ac{MEMS} comprising of a 3-axis gyroscope, accelerometer and magnetometer. This IMU is used because it is relatively inexpensive, works at 3.3 \si{\volt} logic level so is compatible with the Due, and there is a well-documented open-source library for communication between the MPU9250 and an Arduino board, which is available online \cite{MPU9250_library}. The InvenSense datasheet for the MPU9250 is available online \cite{imu_datasheet}.
+
+
+
+\subsection*{Transmitter and Receiver} 
+The radio transmitter used in this project is the Turnigy 9X, which is a well-known and relatively inexpensive beginner level transmitter. It was chosen because of its 9 channels, relatively long-range transmission capability and its capability of assigning a potentiometer to a channel. It turned out that the transmitter is not well designed and the one ordered for this project was faulty, which caused many problems and setbacks. The main design flaw with the transmitter is that the antenna circuit board uses an unreliable connection to the main circuitry in the transmitter body. Troubleshooting was carried out using an oscilloscope to see the receiver output.
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/transmitter_and_rx.jpg}
+    \caption{Image of transmitter and receiver connected to a power supply.}
+    \label{fig:tx_and_rx}
+\end{figure}
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/oscilloscope_troubleshoot.jpg}
+    \caption{Setup of troubleshooting transmitter and receiver with oscilloscope: one probe is connected to the \ac{PPM} data pin of the receiver.}
+    \label{fig:oscilloscope_troubleshooting}
+\end{figure}
+
+The radio receiver used in this project is the Turnigy iA8 Receiver, that uses the AFHDS 2A system, because it came in a bundle with the transmitter. The receiver works at a logic level of 5 \si{\volt} and so a bi-directional logic level converter (LLC), shown in Figure \ref{fig:breadboard}, is used to reduce the 5 \si{\volt} logic level down to 3.3 \si{\volt} to be compatible with the Arduino Due. The receiver only supports \ac{PWM} or \ac{PPM} output, illustrated in Figure \ref{fig:oscilloscope_ppm}, which caused a long setback to devise and create a custom function for receiving this data on the Arduino Due, as there is no library available to solve this task, that can be integrated into this application. 
+
+\begin{figure}[htpb!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/ppm_oscilloscope.jpg}
+    \caption{Magnified view of the \ac{PPM} signal from the receiver: note the nine rising edges after a long pulse --- the first edge starts the signal frame, then the time differences between the following eight rising edges is the magnitude of each channel (between 1 and 2 \si{\milli\second}). Each frame is 20 \si{\milli\second} long.}
+    \label{fig:oscilloscope_ppm}
+\end{figure}
+
