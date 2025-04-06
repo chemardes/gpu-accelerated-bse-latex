@@ -32,4 +32,28 @@ shares of Intel stock at \$18. The holder then sells the shares at the agreed st
 However, if the current market price rises above the strike price at expiry, the holder generally does not exercise the option, suffering a loss 
 of \$500.
 
-\subsection{The Black-Scholes model}
+\textcolor{red}{\textbf{QUESTION:} WHAT IS THE PROBLEM YOU'RE LOOKING AT?!
+(i) Study the derivation of BSE with different tools and methods that will shed light into..
+(ii) Study numerical methods for solving BSE as a PDE,
+(iii) GPU acceleration of solvers and benchmarking,
+(iv) Further experimentation with BSE and application to financial data.}
+
+\subsection{Background}
+\begin{enumerate}
+    \item In the financial mathematics literature there are mainly three (?) way to 
+    solve the Black-Scholes equation: (i) analytical (FPE),
+    (ii) numerical, (iii) Monte-Carlo simulations [BOOK].
+    \item Interestintly, the BSE and the heat equtaion are equivalent [ref] 
+    (see derivation in Section XYZ). This allows us to leverage numerical 
+    methods that are commonly used for the heat equation to solve our BSE;
+    namely---explicit num schemes and the Crank-Nicolson method.
+    These methods have been succssfully used in the literature [X, Y, Z, Q].
+    \item The unique contribution of this work is to leverage the power of GPUs
+    to accelerate the solution of the BSE. This is a novel approach that (???)
+    has not been thoroughly explored in the literature (expain).
+    In partiucular, these guys did this, those guys did that, ... 
+    In conclusion, ...
+    \item The BSE is heavily used in financial markets to price options.
+    For example, these guys did this, those guys did that, ... 
+    In conclusion, ...
+\end{enumerate}

@@ -1,3 +1,5 @@
+% PARTIAL DIFFERENTIAL EQUATIONS
+
 \section{Partial Differential Equations (PDE)}\label{sec:pde}
 A partial differential equation (PDE) is defined as a differential equation that relates the derivatives
 of a function such that it depends on more than one independent variable.\cite{olver_2014_pde}
@@ -38,7 +40,6 @@ and $x=L$
 \beta(0) = u_0(L).
 \end{gather*} 
 
-
 \subsection{Black-Scholes Equation}\label{sec:bse}
 The Black-Scholes (BS) equation is the PDE
 \begin{equation}
@@ -53,26 +54,25 @@ Based on the type of option, the BS equation is accompanied by certain terminal 
 \subsubsection{European Call Option}
 For European call options, we use the lower boundary condition (at $S=0$)
 \begin{equation}
-        V(0,t) = 0, 
+        C(0,t) = 0, 
 \end{equation}
-which means that the value of option for a zero-value underlying is zero.
-An ``upper'' boundary condition is also imposed (at $S \rightarrow  \infty$).
-% The upper condition enforces that for ``very expensive'' underlying assets, 
-% the option should be priced at the same value as the underlying. 
-% In other words, $V(S,t) \sim S$ as $S \to  \infty$.
+which means that the value of option for a zero-value underlying is zero. The call option is
+therefore worthless. An ``upper'' boundary condition is also imposed (at $S \rightarrow  \infty$).
+This enforces that for ``very expensive'' underlying assets, the option should be priced at the same value as the underlying. 
+In other words, $C(S,t) \sim S$ as $S \to  \infty$.
 Practically, this condition can be imposed at a sufficiently
 large value $S_{\rm max}$. A typical choice \cite{kwok_2008_derivatives} is 
 \begin{equation}
-        V(S_{max},t) = S_{\rm max} - Ke^{-rT}.
+        C(S_{max},t) = S_{\rm max} - Ke^{-rT}.
 \end{equation}
 The term $Ke^{-rT}$ represents the present value of the strike price discounted by the the risk-free
 rate $r$ over the time to expiry $T$. Lastly, we impose the terminal condition (at $t = T$),
 which is 
 \begin{equation}
- V(S_T,T) = \max(S-K,0)   
+ C(S,T) = \max(S-K,0)  \label{eq:call-terminal} 
 \end{equation}
 for all $S$.
-The option payoff $V(S,T)$ is specified at expiration $T$,
+The option payoff $C(S,T)$ is specified at expiration $T$,
 where $S$ represents the current price of the asset and $K$ denotes the strike price.
 
 \subsubsection{European Put Option}
@@ -80,29 +80,26 @@ The case of European put options follows a different set of terminal and boundar
 value at zero, the payoff becomes approximately $K$ when the option is exercised. Hence, we have
 the lower boundary condition
 \begin{equation}
-    V(0,t) = Ke^{-rT}.
+    P(0,t) = Ke^{-rT}.
 \end{equation}
 On one hand, as the underlying asset $S$ becomes very large, the put option becomes inherently worthless which gives 
 the upper boundary condition ($S \to \infty$)
 \begin{equation}
-    V(S,t) \to 0. 
+    P(S,t) \to 0. 
 \end{equation}
 The terminal condition for the put option is set to
 \begin{equation}
-    V(S,T) = \max(K-S,0)
+    P(S,T) = \max(K-S,0)
 \end{equation}
 
 \subsection{Equivalence between the heat equation and the Black-Scholes equation}\label{sec:equivalence} 
- (add ref to wilmott mathematics of fin derivatives)
-
-Following a change in variables, the Black-Scholes equation can be transformed into the one-dimensional heat equation. Recall that the Black-Scholes equation takes the form of Equation \eqref{eq:black-scholes}.
-Here, the following substitutions can be applied to remove the $S$ term from the equation.
-\begin{subequations}
+Following a change in variables, the Black-Scholes equation can be transformed into the one-dimensional heat equation \cite{wilmott_1995_mathematics}. Recall that the Black-Scholes equation takes the form of Equation \eqref{eq:black-scholes}.
+In this analysis, we consider the case of a \textit{European call} option as an example. Here, the following substitutions can be applied to remove the $S$ term from the equation.
 \begin{align} 
-t ={}& T - \frac{2}{\sigma^2} \tau\\
-S ={}& e^x 
+t ={}& T - \frac{2}{\sigma^2} \tau  \label{eq:t-substituion} \\ 
+S ={}& Ke^x                         \label{eq:s-substition}  \\
+V ={}& Kv(x,\tau)                   \label{eq:v-substitution}
 \end{align} 
-\end{subequations}
 The derivatives can now be rewritten as follows
 \begin{align}
     V_t 
@@ -111,7 +108,7 @@ The derivatives can now be rewritten as follows
     {}={} 
     \frac{\partial V}{\partial \tau} \frac{d \tau}{dt} 
     {}={} 
-    -\frac{\sigma^2}{2} \frac{d \tau}{dt} 
+    -\frac{\sigma^2}{2} \frac{dV}{d\tau} 
     {}={}  -\frac{1}{2} \sigma^2 V_{\tau}
 \\
     V_S
@@ -159,7 +156,15 @@ by $-\frac{1}{2}\sigma^2$ to yield
 \begin{equation}
     V_{\tau} - V_{xx} + (1-\lambda)V_x + \lambda V = 0, \label{eq:V_simplified}
 \end{equation}
-where $\lambda = \frac{2r}{\sigma^2}$. 
+where $\lambda = \frac{2r}{\sigma^2}$. The initial condition for this equation comes from the payoff of the option at $\tau = 0$. For a call option, the payoff
+is described by \eqref{eq:call-terminal}. Using the substitution from \eqref{eq:s-substition}, the initial condition is
+\begin{equation}
+    V(Ke^x, T) = \max(Ke^x - K, 0) = K \max(e^x - 1, 0),
+\end{equation}
+where the K term can be factored out to give
+\begin{equation}
+    V(x,0) = \max(e^x - 1, 0).
+\end{equation}
 Now, the transformation
 \begin{equation}
 V(x,\tau) = e^{ax+b\tau} u(x,\tau) 
@@ -192,11 +197,398 @@ b ={}& a^2-a(1-\lambda)-\lambda = -\frac{(\lambda+1)^2}{4}
 \end{align}
 Ultimately, leading to the heat equation,
 \begin{equation}
-    u_\tau = u_{xx}.
+    u_\tau = u_{xx}
+\end{equation}
+with the initial condition
+\begin{equation}
+    u(x,0) = \max(e^{\frac{1}{2} (\lambda + 1)x} - e^{\frac{1}{2} (\lambda - 1)x}, 0).
 \end{equation}
 
-% include the conversion of terminal and boundary conditions for the equivalence ( look at wilmott's mathematics of financial derivatives)
+% STOCHASTIC DIFFERENTIAL EQUATIONS
 
+\section{Stochastic differential equations}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+
+Stochastic differential equations play an integral role in the mathematical modelling of financial processes, particularly due 
+to their ability to capture the uncertainty and randomness that is inherent in financial markets. A \textit{stochastic process} is defined as a collection of random variables indexed by time,
+where each variable represents the state of the system at a given time.
+
+\subsection{Brownian motion}
+\begin{definition}
+    The standard (one-dimensional) \textit{Brownian motion} is defined as a continous-time \textit{stochastic process} such that it satisfies the following properties:
+    \begin{enumerate}[(1)]
+        \item $B_0 = 0$,
+        \item the paths (the function $t \rightarrow B_t(\omega)$) are continuous in $t$ a.s.,
+        \item the process $\{ B_t \}_{t \geq 0}$ has stationary and independent increments,
+        \item the increments $B_{t+h} - B_t$ follow a normal distribution with mean 0 and variance $h$.
+    \end{enumerate}
+\end{definition}
+
+The third property of the standard \textit{Brownian motion} implies that it is a \textit{Markov process} where the future behaviour of the process
+depends only on its present value and is independent of its past history.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/brownian_plot.pdf}
+    \caption{Sample paths of a standard Brownian motion.}
+    \label{fig:bm-sample-paths}
+\end{figure}
+
+\subsection{It\^{o} Integral}
+
+When working with stochastic processes, standard Riemann integrals are not sufficient enough to capture the stochastic nature of the process. 
+The non-differentiable paths of the Brownian motion demand a different approach to integration, which is where the \textit{It\^{o} integral} comes into play.
+
+\begin{definition}
+A filtration $\mathcal{F}_t$ is an increasing collection of sigma-algebras that represents the history of a stochastic process up to time $t$.
+\end{definition}
+
+\begin{definition}
+An $\mathcal{F}_t$-adapted process $f_t$ is said to be elementary if it is a piece-wise constant function of the form 
+\begin{equation}
+    f_t(\omega) = \sum_{i} e_i(\omega) \cdot \mathbb{I}_{[t_i, t_{i+1})}(t),
+\end{equation}
+where there exists a series of stopping times $0 = t_0 < t_1 < \ldots < t_n = T$, and $\mathbb{I}_{[t_i, t_{i+1})} = 1$ if $t \in [t_i, t_{i+1})$ or 0 otherwise.
+Note that the function $e_i(\omega)$ is $\mathcal{F}_{t_i}$ measurable and is bounded in the interval $[t_i, t_{i+1})$.
+\end{definition}
+\begin{definition}
+    Given a stochastic process $f_t$ adapted to a filtration $\mathcal{F}_t$ and a Brownian motion $B_t$ over an interval $[0,T]$, the \textit{It\^{o} integral} of an elementary process is defined as
+    \begin{equation}
+        % Y_t = \int_0^t f_t(\omega) dB_t(\omega) = \lim_{n \to \infty} \sum_{i=0}^{n-1} f_{t_i}(\omega) \cdot (B_{t_{i+1}}(\omega) - B_{t_i} (\omega)),
+        Y_t = \int_0^T f_t(\omega) dB_t(\omega) := \sum_{i = 0}^{n-1} e_i (\omega) \cdot (B_{t_{i+1}}(\omega) - B_{t_i} (\omega)),
+    \end{equation}
+    where $Y_t$ is a newly defined stochastic process based on the stochastic processes $f_t$ and $B_t$.
+\end{definition}
+
+\subsubsection{It\^{o} integral for General Integrands}
+Here, the It\^{o} integral is extended to general integrands where the integrand is not necessarily elementary; Instead, we have
+integrands that undergo continuous variations and jumps\cite{shreve_2004_stochastic2}.
+\begin{definition}
+    The \textit{It\^{o} integral} for general integrands $X_t(\omega)$ is defined as
+    \begin{equation}
+        \int_0^T X_t(\omega) dB_t(\omega) = \lim_{n \to \infty} \int_0^T X_{t}^{(n)}(\omega) dB_t(\omega),
+    \end{equation}
+    where $X_{t}^{(n)}(\omega)$ represents a sequence of elementary processes that converges to $X_t(\omega)$, i.e., in $L^2([0,T] \times \Omega).$
+\end{definition}
+
+
+% IMPORTANT COMMENTS
+% + Some plots of paths of the BM 
+
+% + Ito integrals: what they are (define them for elementary 
+% functions, extend using the limit).
+%  talk about martingale
+
+% GBM
+% + plots.
+% + what are some basic properties of GBM? (lognormal distribution)
+% + What do we use it for? (stock price modelling)
+
+
+\subsection{It\^{o} processes}
+Let $B_t$ be a 1-dimensional \textit{Brownian motion}. An \textit{It\^{o} process} is represented by the stochastic differential equation (SDE)
+\begin{equation}
+    dX_t = a(t, X_t) dt + \sigma(t, X_t) dB_t, \label{eq:ito-process}
+\end{equation}
+where $a(t, X_t)$ is known as the \textit{drift} term and $\sigma(t, X_t)$ is the diffusion term. The SDE can otherwise be rewritten in the form
+\begin{equation}
+    X_t = X_0 + \int_0^t a(s, X_s) dt + \int_0^t \sigma(s, X_s) dB_s.
+\end{equation}
+\begin{theorem}[Ito's Lemma~\cite{oksendal_2003_sde}]
+    \label{thm:ito-lemma}
+    Suppose $X_t$ is an It\^{o} process given by \eqref{eq:ito-process}. Let $g(t, x)$ be a function such that $g$ is twice continuously differentiable (i.e. $g \in C^2$ on $\left [ 0, \infty \right ) \times \mathbb{R}$).
+    Then, the function $Y_t = g(t, X_t)$ is also an It\^{o} process where the SDE is given by
+    \begin{equation}
+        dY_t = \frac{\partial g}{\partial t} (t, X_t) dt + \frac{\partial g}{\partial x} (t, X_t) dX_t + \frac{1}{2} \frac{\partial^2 g}{\partial x^2} (t, X_t) \cdot (dX_t)^2,
+    \end{equation}
+    where $(dX_t)^2 = (dX_t) \cdot (dX_t)$ follows the It\^{o} calculus rules
+    \begin{equation}
+        dt \cdot dt = dt \cdot dB_t = dB_t \cdot dt = 0, \quad dB_t \cdot dB_t = dt. \label{eq:ito-calculus_rules}
+    \end{equation}
+\end{theorem}
+
+\subsection{Geometric Brownian motion (GBM)}
+A stochastic process $S_t$ is said to follow a \textit{Geometric Brownian motion} with drift rate $\mu$ and volatility $\sigma$ if it satisfies the SDE
+\begin{equation}
+    dS_t = \mu S_t dt + \sigma S_t dB_t, \label{eq:gbm}
+\end{equation}
+where $B_t$ is a standard Brownian motion.
+
+\subsubsection{Solution to the GBM Stochastic Differential Equation}
+Let $S_t$ be a stochastic process that satisfies \textit{Geometric Brownian motion}. By applying It\^{o}'s Lemma (Theorem \ref{thm:ito-lemma}) to the function $ Y_t = g(t, S_t) = \log S_t$, we obtain the resulting SDE for $Y_t$:
+\begin{equation}
+    dY_t = g_t dt + g_x dX_t + \frac{1}{2} g_{xx} (dX_t)^2,
+\end{equation}
+which is equivalent to
+\begin{align}
+    d(\log S_t) 
+    {}={}& \frac{\partial \log S_t}{\partial t} dt + \frac{\partial \log S_t}{\partial t} dS_t + \frac{1}{2} \frac{\partial^2 \log S_t}{\partial S_t^2} (dS_t)^2 \notag\\
+    {}={}& \frac{1}{S_t} dS_t - \frac{1}{2} (\frac{1}{{S_t}^2}) (dS_t)^2. \label{eq:ito-gbm}
+\end{align}
+Using the SDE in equation \eqref{eq:gbm} for $S_t$ under the assumption of GBM, we can compute the $(dS_t)^2$ term to get
+\begin{equation}
+    (dS_t)^2 = (\mu S_t dt + \sigma S_t dB_t)^2 = \sigma ^2 {S_t}^2 dt.
+\end{equation}
+Substituting this back into equation \eqref{eq:ito-gbm} leaves us with the simplified form:
+\begin{equation}
+    d(\log S_t) = \mu dt + \sigma dB_t - \frac{1}{2} \sigma^2 dt = (\mu - \frac{1}{2} \sigma^2) dt + \sigma dB_t. \label{eq:ito-gbm-simplified}
+\end{equation}
+Integrating both sides of the equation using $\beta = \mu - \frac{1}{2} \sigma^2$, the solution to the SDE is given by
+\begin{equation}
+    \log S_t = \log S_0 + (\mu - \frac{1}{2} \sigma^2) t + \sigma B_t, \label{eq:log-gbm}
+\end{equation}
+which is otherwise known as
+\begin{equation}
+    S_t = S_0 e^{(\beta t + \sigma B_t)}. \label{eq:gbm-solution}
+\end{equation}
+
+\subsubsection{Lognormal Property}
+Here, it is observed that the solution \eqref{eq:gbm-solution} to the \textit{Geometric Brownian motion} SDE is described by a lognormal distribution. From equation \eqref{eq:ito-gbm-simplified}, 
+the constant drift rate $\mu - \frac{1}{2} \sigma^2$ and volatility $\sigma$ indicate that $Y_t = \log S_t$ follows a Brownian motion with drift. This implies that the change in $\log S_t$ is normally distributed, with the distribution given by
+\begin{equation}
+    \log S_t \sim N[ \log S_0 + (\mu - \frac{1}{2} \sigma^2)t, \sigma^2 t].
+\end{equation}
+
+\subsubsection{Markov property}
+Like the standard Brownian motion, the \textit{Geometric Brownian motion} is also a \textit{Markov process}. This means that the future behaviour of the process depends only on its present value and is independent of its past history.
+
+\subsubsection{Uses of GBM}
+Geometric Brownian motion is typically used in Mathematical Finance, particularly to model the behaviour of stock prices \cite{hull_2021_options}.
+
+\subsubsection{Sample Plots of Geometric Brownian motion}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.495\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/gbm_plot_1.png}
+        \caption{$\mu = 2, \sigma = 0.05$}
+        \label{fig:gbm-sample-path-1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.495\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/gbm_plot_2.png}
+        \caption{$\mu = 4, \sigma = 0.05$}
+        \label{fig:gbm-sample-path-2}
+    \end{subfigure}
+    \begin{subfigure}[c]{0.495\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/gbm_plot_3.png}
+        \caption{$\mu = 2, \sigma = 0.3$}
+        \label{fig:gbm-sample-path-3}
+    \end{subfigure}
+    \caption{Sample paths of Geometric Brownian motion for different $\mu$ and $\sigma$ values.}
+    \label{fig:gbm-sample-paths}
+\end{figure}
+
+
+\subsection{Black-Scholes Differential Equation}
+The Black-Scholes PDE is derived based on a set of assumptions that model the behaviour of an ideal financial market - the assumptions are as follows:
+\begin{enumerate}[(1)]
+    \item The underlying asset price follows a \textit{Geometric Brownian motion}.
+    \item Short selling of the asset is permitted.
+    \item Trading of the asset can take place continuously.
+    \item There are no transaction costs or taxes.
+    \item There are no risk-free arbitrage opportunities.
+    \item There are no dividends paid out by the undelying asset during the option's lifetime.
+    \item The risk-free interest rate $r$ is constant and known.
+\end{enumerate}
+
+\subsubsection{Derivation of the Black-Scholes PDE via delta hedging} \label{sec:bse-derivation}
+Consider an underlying asset at price $S_t$ which follows \textit{Geometric Brownian motion} with a known initial value $S_0 = S$.
+We define a function $V(S,t)$ to represent the price of a derivative (e.g a European option). By It\^{o}'s Lemma (Theorem \ref{thm:ito-lemma}), we
+get the following SDE for $V(S,t)$:
+\begin{equation}
+    \dd V = \frac{\partial V}{\partial t} \dd t + \frac{\partial V}{\partial S} \dd S + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} (dS)^2.
+\end{equation}
+Substituting the GBM equation \eqref{eq:gbm} into the SDE for $V(S,t)$, we get
+\begin{equation}
+    \dd V = \frac{\partial V}{\partial t} \dd t + \frac{\partial V}{\partial S} (\mu S dt + \sigma S dB) + \frac{1}{2} \frac{\partial^2 V}{\partial S^2} \sigma^2 S^2 dt,
+\end{equation}
+which can be rearranged to give
+\begin{equation}
+    dV = \left( \frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} \right) dt + \sigma S \frac{\partial V}{\partial S} dB_t. \label{eq:ito-bs}
+\end{equation}
+A portfolio consisting of the underlying asset and its derivative can be constructed such that the Brownian motion term is eliminated. A possible example\cite{hull_2021_options} is 
+a portfolio that short sells one derivative and long holds $\frac{\partial V}{\partial S}$ units of the asset. The portfolio is defined by
+\begin{equation}
+    \Pi = -V + \frac{\partial V}{\partial S} S, \label{eq:portfolio}
+\end{equation} 
+where the change in the portfolio value is given by
+\begin{equation}
+    d\Pi = -dV + \frac{\partial V}{\partial S} dS.
+\end{equation}
+Using equations \eqref{eq:ito-bs} and \eqref{eq:gbm}, the equation for $d\Pi$ can be expressed as
+\begin{align}
+    d\Pi 
+    {}={}& -(\frac{\partial V}{\partial t} + \mu S \frac{\partial V}{\partial S} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}) dt - \sigma S \frac{\partial V}{\partial S} dB_t + \frac{\partial V}{\partial S}( \mu S dt + \sigma S dB_t) \notag\\
+    {}={}& -(\frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}) dt. \label{eq:change-in-portfolio}
+\end{align}
+By choosing to hold $\frac{\partial V}{\partial S}$ units of the underlying, it is guaranteed that the portfolio is risk-free. Here, the non-deterministic term $dB_t$ is eliminated, meaning there is no
+exposure to uncertainty due to randomness in the underlying asset price. The assumption that there is no arbitrage opportunity implies that the risk-free portfolio should earn the risk-free rate $r$. Thus, we have that
+\begin{equation}
+    d\Pi = r \Pi dt.
+\end{equation}
+Substituting equations \eqref{eq:portfolio} and \eqref{eq:change-in-portfolio}into the equation above gives
+\begin{equation}
+    \cancel{-}(\frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}) \cancel{dt} = \cancel{-}r (V - \frac{\partial V}{\partial S}) \cancel{dt},
+\end{equation}
+which leaves us with the Black-Scholes PDE
+\begin{equation}
+    \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS \frac{\partial V}{\partial S} - rV = 0. \label{eq:black-scholes-pde}
+\end{equation}
+
+\subsubsection{Black-Scholes Formula for European Options} 
+The analytical solution to the Black-Scholes PDE is given by the Black-Scholes Options Pricing Formula for \textit{Europea}n options. For \textit{European call} options, we have
+\begin{equation}
+    C(S,t) = S_0 N(d_1) - K e^{-r(T-t)} N(d_2),
+\end{equation}
+where $N(x)$ is the cumulative distribution function for a standard normal distribution and
+\begin{align}
+    d_1 {}={}& \frac{\ln (S_0 / K) + (r + \frac{1}{2}\sigma^2)(T-t)}{\sigma \sqrt{T-t}}, \notag \\
+    d_2 {}={}& \frac{\ln (S_0 / K) + (r - \frac{1}{2}\sigma^2)(T-t)}{\sigma \sqrt{T-t}} = d_1 - \sigma \sqrt{T-t}. \notag
+\end{align}
+Similarly, for \textit{European put} options, we have
+\begin{equation}
+   P(S,t) = Ke^{-r(T-t)}N(-d_2) - S_0 N(-d_1).
+\end{equation}
+
+
+\subsection{Delta Hedging and the Greeks}
+In a delta-hedging strategy, the portfolio is continuously rebalanced to maintain a delta-neutral position. This approach relies on a set of risk measures known as 
+the \textit{Greeks} which assesses the sensitivity of the option price to various factors, such as changes in the asset price, time, or volatility. 
+
+\subsubsection{Delta}
+The \textit{delta} of an option (or a portfolio of options) is described by the rate of change of the option price w.r.t the underlying asset price. Mathematically, the delta is defined as
+\begin{equation}
+    \Delta = \frac{\partial V}{\partial S}.
+\end{equation}
+
+Recall that in Section (\ref{sec:bse-derivation}), we defined a portfolio that short sells one derivative and long holds $\frac{\partial V}{\partial S}$ units of the asset. 
+This portfolio is \textit{delta-neutral} (i.e., delta is \textit{zero}) due to the offsetting effect between the derivative and the underlying asset, ensuring that small movements in the underlying price do not affect the overall value of the portfolio.
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.8\textwidth,
+            xlabel={Stock Price (S)},
+            ylabel={Delta},
+            grid=both,
+            axis x line=bottom, 
+            axis y line=left,
+            ytick distance=0.4,
+            height=7cm,
+            width=8cm,
+            clip=false,
+            legend style={
+                at={(1.05,1)},
+                anchor=north west
+            },
+        ]
+            \addplot[
+                color=airforceblue,
+                ultra thick
+            ] table [x=StockPrice, y=Delta, col sep=comma] {figures/option_Delta_call.csv};
+            \addlegendentry{Call Option}
+
+            \addplot[
+                    color=rosequartz,
+                    ultra thick
+                ] table [x=StockPrice, y=Delta, col sep=comma] {figures/option_Delta_put.csv};
+            \addlegendentry{Put Option}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Delta of an Option vs. Stock Price}
+    \label{fig:delta-plot}
+\end{figure}
+
+\subsubsection{Theta}
+The \textit{theta} ($\Theta$) is described by the rate of change of the option price with time, where
+\begin{equation}
+    \Theta = \frac{\partial V}{\partial t}.
+\end{equation}
+In other words, it measures the sensitivity of the option price as it approaches the time to expiry. Theta is typically \textbf{negative} due to the time decay effect of options, where the value of an option becomes less valuable over time. 
+While delta can be used for hedging (since it reflects changes in the underlying asset's price), theta is not necessarily hedged. This is because time decay is a deterministic process, and there is no
+uncertainty in the time to expiry. 
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.8\textwidth,
+            xlabel={Stock Price (S)},
+            ylabel={Theta},
+            grid=both,
+            axis x line=bottom, 
+            axis y line=left,
+            ytick distance=2,
+            height=7cm,
+            width=8cm,
+            clip=false,
+            legend style={
+                at={(1.05,1)},
+                anchor=north west
+            },
+        ]
+            \addplot[
+                color=airforceblue,
+                ultra thick
+            ] table [x=StockPrice, y=Theta, col sep=comma] {figures/option_Theta_call.csv};
+            \addlegendentry{Call Option}
+
+            \addplot[
+                    color=rosequartz,
+                    ultra thick
+                ] table [x=StockPrice, y=Theta, col sep=comma] {figures/option_Theta_put.csv};
+            \addlegendentry{Put Option}
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Theta of an option vs. Stock Price}
+    \label{fig:theta-plot}
+\end{figure}
+
+\subsubsection{Gamma}
+The \textit{gamma} ($\Gamma$) of an option (or a portfolio of options) is described by the rate of change of the delta with respect to the price of the underlying asset. Mathematically, gamma is defined as
+\begin{equation}
+    \Gamma = \frac{\partial^2 V}{\partial S^2}.
+\end{equation}
+Since gamma measures the sensitivity of delta to changes in the underlying price, it is crucial for assessing the frequency of rebalancing a delta-hedged portfolio. A small gamma indicates
+that the delta remains relatively stable, and thus the portfolio would not require frequent rebalancing. A high gamma indicates that delta changes more rapidly with price movements, making the portfolio more sensitive to small price changes and requiring more frequent rehedging to maintain a delta-neutral position.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.8\textwidth,
+            xlabel={Stock Price (S)},
+            ylabel={Gamma},
+            grid=both,
+            axis x line=bottom, 
+            axis y line=left,
+            height=6cm,
+            width=8cm,
+            clip=false,
+            legend style={
+                at={(1.05,1)},
+                anchor=north west
+            },
+        ]
+            \addplot[
+                color=airforceblue,
+                ultra thick,
+            ] table [x=StockPrice, y=Gamma, col sep=comma] {figures/option_Gamma_call.csv};
+            \addlegendentry{Call \& Put Option}
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Gamma of an option vs. Stock Price}
+    \label{fig:gamma-plot}
+\end{figure}
+
+%  NUMERICAL METHODS
 
 \section{Numerical Methods}\label{sec:numerical-methods}
 The following numerical methods have been used to obtain a solution for the Black-Scholes equation.
@@ -256,7 +648,7 @@ The grid below shows how the temperature at the next time step is computed using
 
     \draw[-, line width=0.05em, black] (2, 1) -- (2, 2);
 
-    \draw[->, line width=0.25em, blue] (2, 2.3) -- (2, 3.3);
+    \draw[->, line width=0.25em, airforceblue] (2, 2.3) -- (2, 3.3);
     \node at (2,2-0.012) {$\bullet$}; % Only one point in time step 2 (k=2)
     \end{tikzpicture}
     \caption{Explicit method for the heat equation}
@@ -335,7 +727,7 @@ The grid below illustrates how the option price at the subsequent time step can 
 
     \draw[-, line width=0.05em, black] (2, 2) -- (3, 2);
 
-    \draw[->, line width=0.25em, blue] (1.8, 2) -- (0.8, 2);
+    \draw[->, line width=0.25em, airforceblue] (1.8, 2) -- (0.8, 2);
     \node at (2,2-0.012) {$\bullet$}; 
     \end{tikzpicture}
     \caption{Explicit method for the Black-Scholes equation}
@@ -382,14 +774,14 @@ where $r = \frac{\Delta t}{2(\Delta x)^2}$. This leaves us with a tridiagonal sy
 
     \draw[-, line width=0.05em, black] (2, 1) -- (2, 2);
 
-    \draw[->, line width=0.25em, blue] (2, 2.3) -- (2, 3.3);
+    \draw[->, line width=0.25em, airforceblue] (2, 2.3) -- (2, 3.3);
     \node at (2,2-0.012) {$\bullet$}; % Only one point in time step 2 (k=2)
     \end{tikzpicture}
     \caption{Crank-Nicolson method for the heat equation}
     \label{fig:heat-cn}
 \end{figure}
 
-
+I NEED TO REWRITE THIS BECAUSE I USED THE REVERSE METHOD
 \subsubsection{Black-Scholes equation}
 % this needs to be fixed because i use the other way 
 Similarly, the Crank-Nicolson method can be applied to the Black-Scholes equation. The equation is rewritten as 
@@ -452,7 +844,7 @@ This system of equations can be solved to obtain the option values at the next t
     }
 
     \draw[->, line width=0.05em, black] (2, 2) -- (3, 2);
-    \draw[->, line width=0.25em, blue] (1.8, 2) -- (0.8, 2);
+    \draw[->, line width=0.25em, airforceblue] (1.8, 2) -- (0.8, 2);
 
     \node at (2,2-0.012) {$\bullet$}; 
     \end{tikzpicture}
@@ -460,10 +852,5 @@ This system of equations can be solved to obtain the option values at the next t
     \label{fig:bse-cn}
 \end{figure}
 
-
-\section{Stochastic differential equations}
-\subsection{Brownian motion}
-\subsection{Ito processes}
-\subsection{Geometric Brownian motion}
-\subsection{GBM for option pricing}
-
+\subsection{Monte Carlo Simulations}
+See \url{https://en.wikipedia.org/wiki/Feynman%E2%80%93Kac_formula#Finance}

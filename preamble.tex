@@ -15,7 +15,9 @@
 %     \newtcblisting{mylisting}{listing only,listing engine=minted, minted language=py, minted style=borland,colback=gray!20}
 \usepackage{subcaption}
 \usepackage{booktabs}
-\usepackage{pgfgantt,pgfplotstable}
+\usepackage{pgfgantt,pgfplotstable,pgfplots}
+\usepackage{csvsimple}
+\usepackage{xcolor}
 \usepackage{framed}
 \usepackage{enumerate}
 \usepackage{lscape}
@@ -33,6 +35,8 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{rosequartz}{rgb}{0.96, 0.75, 0.76}
 
 \pgfplotsset{compat=1.18}
 
@@ -119,6 +123,7 @@
 \newcommand{\Cov}{\operatorname{Cov}}
 \newcommand{\dfn}{\mathrel{\mathop:}=}
 \newcommand{\NN}{\mathcal{N}}
+\newcommand{\dd}{\mathrm{d}}
 
 % --- Acronyms ---
 \usepackage{acronym}
