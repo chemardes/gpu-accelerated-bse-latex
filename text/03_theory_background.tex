@@ -488,15 +488,15 @@ This portfolio is \textit{delta-neutral} (i.e., delta is \textit{zero}) due to t
             },
         ]
             \addplot[
-                color=airforceblue,
+                color=blue,
                 ultra thick
-            ] table [x=StockPrice, y=Delta, col sep=comma] {figures/option_Delta_call.csv};
+            ] table [x=StockPrice, y=Delta, col sep=comma] {csv/option_Delta_call.csv};
             \addlegendentry{Call Option}
 
             \addplot[
-                    color=rosequartz,
+                    color=purple,
                     ultra thick
-                ] table [x=StockPrice, y=Delta, col sep=comma] {figures/option_Delta_put.csv};
+                ] table [x=StockPrice, y=Delta, col sep=comma] {csv/option_Delta_put.csv};
             \addlegendentry{Put Option}
         \end{axis}
     \end{tikzpicture}
@@ -533,15 +533,15 @@ uncertainty in the time to expiry.
             },
         ]
             \addplot[
-                color=airforceblue,
+                color=blue,
                 ultra thick
-            ] table [x=StockPrice, y=Theta, col sep=comma] {figures/option_Theta_call.csv};
+            ] table [x=StockPrice, y=Theta, col sep=comma] {csv/option_Theta_call.csv};
             \addlegendentry{Call Option}
 
             \addplot[
-                    color=rosequartz,
+                    color=purple,
                     ultra thick
-                ] table [x=StockPrice, y=Theta, col sep=comma] {figures/option_Theta_put.csv};
+                ] table [x=StockPrice, y=Theta, col sep=comma] {csv/option_Theta_put.csv};
             \addlegendentry{Put Option}
 
         \end{axis}
@@ -577,9 +577,9 @@ that the delta remains relatively stable, and thus the portfolio would not requi
             },
         ]
             \addplot[
-                color=airforceblue,
+                color=blue,
                 ultra thick,
-            ] table [x=StockPrice, y=Gamma, col sep=comma] {figures/option_Gamma_call.csv};
+            ] table [x=StockPrice, y=Gamma, col sep=comma] {csv/option_Gamma_call.csv};
             \addlegendentry{Call \& Put Option}
 
         \end{axis}

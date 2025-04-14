@@ -1,0 +1,236 @@
+\begin{landscape}
+\begin{figure}[H]
+    \centering
+\begin{tikzpicture}[scale=0.46, transform shape]
+
+        \begin{umlpackage}[x=-9, y=8]{pdes}
+            \umlclass[y=-11]{BlackScholesEquation}{
+            - option\_type: OptionType \\
+            - S\_max: float \\
+            - K: float \\
+            - r: float \\
+            - sigma: float \\
+            - expiry: float \\
+            - s\_nodes: int \\
+            - t\_nodes: int \\
+            - V: np.ndarray 
+            }{
+                \umlstatic{+ generate\_grid(value: float, nodes: int)} \\
+                + s\_nodes: int \{property\} \\
+                + t\_nodes: int \{property\} \\
+                + option\_type: OptionType \{property\} \\
+                + S\_max: float \{property\} \\
+                + sigma: float \{property\} \\
+                + expiry: float \{property\} \\
+                + rate: float \{property\} \\
+                + strike\_price: float \{property\}
+            }
+
+            \umlclass[y=0]{HeatEquation}{
+                - length: float \\
+                - x\_nodes: int \\
+                - time: float \\
+                - t\_nodes: int \\
+                - k: float \\
+                - initial\_temp: callable \\
+                - left\_boundary\_temp: callable \\
+                - right\_boundary\_temp: callable
+            }{
+                + set\_initial\_temp(u0: callable) \\
+                + set\_left\_boundary\_temp(left: callable) \\
+                + set\_right\_boundary\_temp(right: callable) \\
+                + generate\_grid(value: float, nodes: int) \\
+                + length: float \{property\} \\
+                + time: float \{property\} \\
+                + x\_nodes: int \{property\} \\
+                + t\_nodes: int \{property\} \\
+                + k: float \{property\} \\
+                + get\_initial\_temp(x: float): float \\
+                + get\_left\_boundary(t: float): float \\
+                + get\_right\_boundary(t: float): float
+            }
+        \end{umlpackage}
+
+        \begin{umlpackage}[x=1, y=12]{solvers}
+            \umlclass[x=0, y=0]{BlackScholesExplicitSolver}{
+                - equation : BlackScholesEquation
+            }{
+                + solve()
+            }
+            
+            \umlclass[x=6.5, y=0]{BlackScholesCNSolver}{
+                - equation: BlackScholesEquation
+            }{
+                + solve()
+            }
+
+            \umlclass[x=12.3, y=0]{Heat1DExplicitSolver}{
+                - equation : HeatEquation
+            }{
+                + solve()
+            }
+
+            \umlclass[x=17.5, y=0]{Heat1DCNSolver}{
+                - equation : HeatEquation
+            }{
+                + solve()
+            }
+
+            \umlclass[type=abstract, x=2, y=-4]{Solver}{
+
+            }{
+                + solve()
+            }
+
+            \umlinherit[geometry=-|]{BlackScholesExplicitSolver}{Solver}
+            \umlinherit[geometry=|-]{BlackScholesCNSolver}{Solver}
+            \umlinherit[geometry=|-]{Heat1DExplicitSolver}{Solver}
+            \umlinherit[geometry=|-]{Heat1DCNSolver}{Solver}
+
+        \end{umlpackage}
+
+        \begin{umlpackage}[x=3, y=1]{solution}
+            \umlclass[y=-0.5]{Solution}{
+                - result: numpy.array \\
+                - x\_grid: numpy.array \\
+                - y\_grid: numpy.array \\
+                - dx: float \\
+                - dy: float \\
+                - duration: float 
+            }{
+                + plot() \\ 
+                + get\_result() \\ 
+                + get\_execution\_time() \\
+                + \_\_sub\_\_(other: Solution) \\
+                \# set\_plot\_labels(ax)
+            }
+
+            \umlclass[x=6, y=2]{Solution1D}{
+                
+            }{\# set\_plot\_labels(ax)}
+
+            \umlclass[x=8, y=-3]{SolutionBlackScholes}{
+                - option\_type: OptionType \\
+                - delta: float \\
+                - gamma: float \\
+                - theta: float \\
+            }{
+                + plot\_greek(greek\_type: Greeks, time\_step=int) \\
+                \# set\_plot\_labels(ax)
+            }
+
+            \umlinherit[geometry=|-]{Solution1D}{Solution}
+            \umlinherit[geometry=|-]{SolutionBlackScholes}{Solution}
+        \end{umlpackage}
+
+        \begin{umlpackage}[x=-10, y=-12.5]{enums}
+            \umlenum{OptionType}{
+                EUROPEAN\_CALL \\
+                EUROPEAN\_PUT
+            }{}
+
+            \umlenum[x=4]{Greeks}{
+                DELTA \\
+                GAMMA \\
+                THETA
+            }{}
+        \end{umlpackage}
+
+        \begin{umlpackage}[x=26, y=2]{utils}
+
+            \umlclass{Heat1DHelper}{
+            }{
+                \umlstatic{\# build\_tridiagonal\_matrix(a: float, b: float, c: float, nodes: int)}
+            }
+
+            \umlclass[y=-3]{BlackScholesHelper}{
+            }{
+                \umlstatic{\# calculate\_greeks\_at\_boundary(equation, delta, gamma, theta, tau, V, S, ds)} \\
+                \umlstatic{\# set\_boundary\_conditions(equation, T, tau)}
+            }
+
+            \umlclass[y=-8]{RBFInterpolator}{
+                - z: np.ndarray \\
+                - hx: float \\
+                - hy: float \\
+                - nx: int \\
+                - ny: int
+            }{
+                - get\_coordinates(x: float, y: float) \\
+                - euclidean\_distances(x\_minus: float, y\_minus: float, x: float, y: float) \\
+                - \umlstatic{rbf(d: float, gamma: float)} \\
+                + interpolate(x: float, y: float)
+            }
+
+            \umlclass[y=-13.5]{GPUResults}{
+                - file\_path: str \\
+                - s\_max: float \\
+                - expiry: float \\
+                - grid\_data: np.ndarray
+            }{
+                + get\_results()\\
+                + plot\_option\_surface()
+            }
+            
+        \end{umlpackage}
+
+        \begin{umlpackage}[x=4, y=-12]{optionspricing}
+            \umlclass[x=0,y=-4]{BlackScholesFormula}{
+                - option\_type: OptionType \\
+                - S0: float \\
+                - strike\_price: float \\
+                - r: float \\
+                - sigma: float \\
+                - expiry: float
+            }{
+                + get\_black\_scholes\_merton\_price()
+            }
+
+            \umlclass[x=9,y=0]{MonteCarloPricing}{
+                - option\_type: OptionType \\
+                - S0: float \\
+                - strike\_price: float \\
+                - r: float \\
+                - sigma: float \\
+                - T: float
+                - time\_steps: float \\
+                - sim: int \\
+                - S: np.ndarray \\
+                - run: bool
+                - duration: float
+            }{  
+                - generate\_grid() \\
+                + simulate\_gbm() \\
+                + get\_monte\_carlo\_option\_price() \\
+                + get\_execution\_time() \\
+                + plot()
+            }
+
+            \umlclass[x=0,y=2]{HistoricalStockData}{
+                - stock\_data: pd.DataFrame \\
+                - ticker: str 
+            }{
+                + fetch\_stock\_data(start\_date: str, end\_date: str) \\
+                + estimate\_metrics() \\
+                + get\_latest\_stock\_price() 
+            }
+
+        \end{umlpackage}
+
+        \umlcompo{Solver}{Solution}
+        \umlassoc[geometry=|-]{MonteCarloPricing}{OptionType}
+        \umlassoc{BlackScholesFormula}{OptionType}
+        \umlassoc{BlackScholesEquation}{OptionType}
+        \umlassoc{SolutionBlackScholes}{OptionType}
+        \umlassoc{SolutionBlackScholes}{Greeks}
+        \umldep{BlackScholesExplicitSolver}{BlackScholesEquation}
+        \umldep{BlackScholesCNSolver}{BlackScholesEquation}
+        \umldep{Heat1DExplicitSolver}{HeatEquation}
+        \umldep{Heat1DCNSolver}{HeatEquation}
+        \umldep{BlackScholesExplicitSolver}{BlackScholesHelper}
+        \umldep{BlackScholesCNSolver}{BlackScholesHelper}
+        \umldep{Heat1DCNSolver}{Heat1DHelper}
+
+\end{tikzpicture}
+\end{figure}
+\end{landscape}

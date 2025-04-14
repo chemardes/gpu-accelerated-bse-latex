@@ -1,0 +1,28 @@
+% ~2 PAGES
+% Objectives (hi-level, specific), blah
+% O1. Understand the intimate relationship between the BSE and the heat equation and implemnet a solver for the BSE based on the heat equation (the motivation is that we will then be able to use widely available solvers for the heat equation to solve the BSE) + verify correctness
+% O2. Use the GBM to perform MC simulations and evaluate the behaviour of BS-based option pricing in realistic conditions
+% O3. GPU parallelisation of numerical methods and measurement of speed-up (what exactly will be parallelised: BOTH numerical mehtods for PDEs AND GBM)
+
+\section{Introduction and Motivation}
+The Black-Scholes equation is a fundamental partial differential equation used in financial mathematics to estimate the theoretical fair value of financial derivatives, particularly European-style options. Through this equation, the evolution of option prices can be modelled by taking into account multiple factors such as the price of the underlying asset (S), the time to expiration (T), volatility ($\sigma$) and the risk-free rate (r).
+
+The complex nature of partial differential equations (PDEs) presents significant challenges in obtaining general solutions. While an analytical solution to the Black-Scholes equation exists, it is only applicable to a limited class of financial derivatives, particularly European-style options. For more complex options, such as American options or exotic options, closed-form analytical solutions either do not exist or become extremely difficult to obtain. This limitation introduces the need for numerical methods to approximate solutions for such equations. However, the ability to solve PDEs numerically comes with a trade-off, as the computational demands can be significant and time-consuming. This is particularly true when dealing with Monte Carlo simulations for option pricing which require large sampling sizes to achieve accurate results.
+
+Recent advances in parallel computing has opened up new possibilities for accelerating the computations required for numerical methods. By leveraging the power of Graphics Processing Units (GPUs), it becomes possible to achieve significant speed-ups in solving PDEs, making it feasible to tackle more complex problems that were previously computationally intractable.
+
+This project proposes a GPU-accelerated solution for the Black-Scholes equation by exploiting the mathematical equivalence\cite{wilmott_1995_mathematics} between the one-dimensional Heat equation and the Black-Scholes equation. Although separate solvers were developed for each equation, the transformation between the two provides a theoretical foundation for applying similar numerical methods, thereby enabling efficient approximation of solutions for option pricing. Finite difference methods were used to solve the PDEs, and Monte Carlo simulations were employed to price options by modelling the stochastic behaviour of the underlying asset.
+
+Alongside parallelisation on the GPU machine, this project also involves the development of an open-source Python library for solving partial differential equations, distributed as a PyPI package. This library will provide users with the ability to define and solve various PDEs with minimal effort.
+
+\section{Objectives}
+The objectives of this project are as follows:
+\begin{enumerate}
+    \item Understand the intimate relationship between the heat equation and the Black-Scholes equation
+    \item Implement solvers for both the Black-Scholes equation and the heat equation using finite difference schemes
+    \item Verify the correctness of the solvers by comparing the numerical solutions with each other and with analytical solutions
+    \item Develop a Python library for solving PDEs, which will be distributed as a PyPI package
+    \item Use the Geometric Brownian Motion (GBM) model to perform Monte Carlo simulations for Black-Scholes based option pricing in realistic conditions
+    \item Implement GPU parallelisation of the numerical methods, particularly the computationally intensive parts of the code, to achieve significant speed-ups
+    \item Measure the performance of the GPU-accelerated solution and compare it with the CPU-based solution
+\end{enumerate}
