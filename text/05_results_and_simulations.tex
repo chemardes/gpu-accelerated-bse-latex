@@ -9,7 +9,7 @@
 % 4. Geom. Br. Motion results (plots)
 
 \section{Heat Equation}\label{sec:heat_equation-results}
-For the heat equation, we define the parameters as follows: \textbf{(Length of domain $L$ = 1, Spatial nodes = 100, Time = 30, Time Nodes = 10000, and Thermal Diffusivity $\kappa$ = 0.01)} It is further combined with the initial condition $u_0(x) = \sin(\pi x) + 5$, with time-dependent boundary conditions: $u(0,t) = 5 \sin\left(\frac{2 \pi}{25} t \right) + 5$ and $u(L,t) = t+5$.
+For the heat equation, we define the parameters as follows: \textbf{(Length of domain $L = 1$, Spatial nodes $N_x = 100$, Time $= 30$, Time Nodes $N_t = 10000$, Thermal Diffusivity $\kappa = 0.01$)}. It is further combined with the \textbf{initial condition} $u_0(x) = \sin(\pi x) + 5$, with \textbf{time-dependent boundary conditions}: $u(0,t) = 5 \sin\left(\frac{2 \pi}{25} t \right) + 5$ and $u(L,t) = t+5$.
 
 \begin{figure}[H]
     \centering
@@ -26,20 +26,25 @@ For the heat equation, we define the parameters as follows: \textbf{(Length of d
         \caption{\textbf{Crank-Nicolson:} 3D Surface Plot for Heat Equation}
         \label{fig:heat-cn-3d}
     \end{subfigure}
+    \label{fig:heat-3d}
 \end{figure}
 
-Figures \ref{fig:heat-explicit-3d} and \ref{fig:heat-cn-3d} visualise the numerical solutions to the defined heat equation using the \textit{explicit} and \textit{Crank-Nicolson} methods respectively. The left boundary introduces a periodic boundary condition which manifests as oscillations observed in both plots at $x=0$. Meanwhile, the right boundary condition leads to a linear increase in temperature over time, as reflected in the steadily rising temperature at $x=1$. Under unfavourable conditions, the explicit method can lead to numerical instability shown in Figure \ref{fig:heat-explicit-unstable}
+Figures \ref{fig:heat-explicit-3d} and \ref{fig:heat-cn-3d} visualise the numerical solutions to the defined heat equation using the \textit{explicit} and \textit{Crank-Nicolson} methods respectively. The left boundary introduces a periodic boundary condition which manifests as oscillations observed in both plots at $x=0$. Meanwhile, the right boundary condition leads to a linear increase in temperature over time, as reflected in the steadily rising temperature at $x=1$. Under unfavourable conditions, the explicit method can lead to numerical instability shown in Figure \ref{fig:heat-explicit-unstable}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{figures/heat_explicit_unstable.pdf}
-    \caption{\textbf{Explicit:} 3D Surface Plot for Heat Equation (s\_nodes = 100, t\_nodes = 100)}
+    \caption{\textbf{Explicit:} 3D Surface Plot for Heat Equation ($N_x = 100$, $N_t = 100$)}
     \label{fig:heat-explicit-unstable}
 \end{figure}
 
 \section{Black-Scholes Equation}\label{sec:bs_equation-results}
 Defining a common set of parameters for the Black-Scholes equation, the implemented solvers (\textit{numerical methods}) are tested against each other to verify their accuracy. The parameters used for the tests are as follows:
-\textbf{(Initial Stock Price $S_0 = 300$, Strike Price $K = 100$, Risk-free Rate $r = 0.05$, Volatility $\sigma = 0.2$, Expiry $T = 1$, Spatial Nodes $= 100$, and Time Steps $= 1000$)}
+\textbf{(Initial Stock Price $S_0 = 300$, Strike Price $K = 100$, Risk-free Rate $r = 0.05$, Volatility $\sigma = 0.2$, Expiry $T = 1$, Spatial Nodes $N_s = 100$, Time Nodes  $N_t = 1000$)}
+
+At a glance, the results of the numerical solvers appear to be displaying similar plots, staying consistent with theoretical expectations. The surface plots for both option types exhibits the expected behaviour, where call option prices stay close to zero when the underlying asset price is significantly below the strike price, particularly as time approaches maturity. The reverse occurs for a put option where the prices are close to zero when the underlying asset price is significantly above the strike price. Call option prices start to rise only when the underlying asset price exceeds the strike price, while put option prices increase when the asset price falls below the strike price.
+
+Similar to Figure \ref{fig:heat-explicit-unstable}, the \textit{explicit} method for the Black-Scholes method can also lead to numerical instability if the time and spatial nodes are not appropriately chosen (shown in Figure \ref{fig:bs-explicit-unstable}). Using the same parameters that led the \textit{explicit} method to be unstable, the \textit{Crank-Nicolson} method remains stable, as seen in Figure \ref{fig:bs-cn-stable}.
 
 \begin{figure}[H]
     \centering
@@ -70,17 +75,20 @@ Defining a common set of parameters for the Black-Scholes equation, the implemen
         \caption{\textbf{Crank-Nicolson:} 3D Surface Plot for Put Option}
         \label{fig:bs-cn-put}
     \end{subfigure}
-\end{figure}
-
-At a glance, the results of the numerical solvers appear to be displaying similar plots, staying consistent with theoretical expectations. The surface plots for both option types exhibits the expected behaviour, where call option prices stay close to zero when the underlying asset price is significantly below the strike price, particularly as time approaches maturity. The reverse occurs for a put option where the prices are close to zero when the underlying asset price is significantly above the strike price. Only when the underlying asset price is higher than the strike price, the call option prices begin to increase, and vice versa for the put option.
-
-Like in figure \ref{fig:heat-explicit-unstable}, the explicit method for the Black-Scholes method can also lead to numerical instability if the time and spatial nodes are not appropriately chosen (shown in Figure).
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/ bse_unstable.pdf}
-    \caption{\textbf{Explicit:} 3D Surface Plot for Black-Scholes Equation (s\_nodes = 100, t\_nodes = 100)}
-    \label{fig:bse-explicit-unstable}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/bse_unstable.pdf}
+        \caption{\raggedright \textbf{Explicit:} 3D Surface Plot for Black-Scholes Equation ($N_s$ = 100, $N_t$ = 100)}
+        \label{fig:bs-explicit-unstable}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/bse_stable.pdf}
+        \caption{\raggedright \textbf{Crank-Nicolson:} 3D Surface Plot for Black-Scholes Equation ($N_s = 100$, $N_t$ = 100)}
+        \label{fig:bs-cn-stable}
+    \end{subfigure}
+    \label{fig:bs-3d}
 \end{figure}
 
 % At time $t=0$ (i.e. at the initial time step), the option price show a slight curvature before increasing, which is expected as it takes into account the dis
@@ -121,6 +129,7 @@ The speed-up achieved by the GPU implementations of the numerical methods was ev
                 at={(1.05,1)},
                 anchor=north west
             },
+            legend cell align={left}
         ]
         \addplot[
             color=blue,
@@ -150,17 +159,231 @@ The speed-up achieved by the GPU implementations of the numerical methods was ev
     \label{fig:speedup-bse}
 \end{figure}
 
-Figure \ref{fig:speedup-bse} presents a log-log plot of speed-up against an increasing number of spatial nodes for the Crank-Nicolson and Explicit methods. The results align with expectations, demonstrating a notable performance speedup with the GPU implementation, especially for larger problem sizes. With smaller problem sizes, particularly with the Crank-Nicolson method, the GPU implementation did not yield substantial speed-up where, in some cases, performed slower than the CPU. This is likely due to the GPU being underutilised for smaller cases, where its parallel processing capabilities are not fully leveraged. The plots demonstrate that there is a gradual increase in speed-up initially. However, as the problem size increases, the plot becomes steeper, indicating that the GPU is being utilised more effectively.
+Figure \ref{fig:speedup-bse} presents a log-log plot of speed-up against an increasing number of spatial nodes for the {Crank-Nicolson} and {explicit} methods. The results align with expectations, demonstrating a notable performance speedup with the GPU implementation, especially for larger problem sizes. With smaller problem sizes, particularly with the \textit{Crank-Nicolson} method, the GPU implementation did not yield substantial speed-up where, in some cases, performed slower than the CPU. This is likely due to the GPU being underutilised for smaller cases, where its parallel processing capabilities are not fully leveraged. The plots demonstrate that there is a gradual increase in speed-up initially. However, as the problem size increases, the plot becomes steeper, indicating that the GPU is being utilised more effectively.
 
-Looking at the results, the explicit method shows a higher speed-up compared to the Crank-Nicolson method, which is expected due to its lower computational complexity. The latter method requires a more complex solution process that involves solving a system of linear equations per time step, which can be more computationally intensive.
-\section{Geometric Brownian Motion}\label{sec:gbm_results}
+Looking at the results, the \textit{explicit} method shows a higher speed-up compared to the \textit{Crank-Nicolson} method, which is expected due to its lower computational complexity. The latter method requires a more complex solution process that involves solving a system of linear equations per time step, which can be more computationally intensive.
+
+\section{Geometric Brownian Motion and Monte Carlo Simulations}\label{sec:gbm_results}
+
+For reproducibility, a seed has been set for the random number generator, ensuring that the results can be replicated. The following parameters will be used to obtain the results for the Geometric Brownian Motion (GBM) and Monte Carlo simulations: 
+\textbf{(Initial Stock Price $S_0 = 300$, Strike Price $K = 100$, Risk-free Rate $r = 0.05$, Volatility $\sigma = 0.2$, Expiry $T = 1$, Time Steps $\tau = 365$, Simulations = $1000$, Seed $= 78$)}
+
+Figures \ref{fig:price-distribution-lower-vol} and \ref{fig:price-distribution-higher-vol} show the distribution of underying asset prices at expiry for two different volatility levels ($\sigma = 0.2$ and $\sigma = 0.4$). The distribution of prices at expiry is expected to be log-normally distributed, as the GBM model assumes that the logarithm of the asset prices follows a normal distribution. The figures illustrate this behaviour, with the distribution becoming wider as the volatility increases.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/monte_carlo_price_distribution.pdf}
-    \caption{Distribution of prices at expiration}
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/monte_carlo_prices_small_vol.pdf}
+        \caption{Distribution of prices ($\sigma=0.2$)}
+        \label{fig:price-distribution-lower-vol}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/monte_carlo_prices_high_vol.pdf}
+        \caption{Distribution of prices ($\sigma=0.4$)}
+        \label{fig:price-distribution-higher-vol}
+    \end{subfigure}
+    \caption{Distribution of Asset Prices at Expiry}
     \label{fig:price-distribution}
 \end{figure}
 
+The distribution of payoffs at expiry is shown in Figures \ref{fig:payoff-distribution-call} and \ref{fig:payoff-distribution-put}. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/monte_carlo_payoff_call.pdf}
+        \caption{Distribution of payoff for Call Option ($K = 100, \sigma = 0.2$)}
+        \label{fig:payoff-distribution-call}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/monte_carlo_payoff_put.pdf}
+        \caption{Distribution of payoff for Put Option ($K = 600, \sigma = 0.2$)}
+        \label{fig:payoff-distribution-put}
+    \end{subfigure}
+    \caption{Distribution of Payoff at Expiry}
+    \label{fig:payoff-distribution}
+\end{figure}
+
+The effect of increasing the number of simulations on the accuracy of the Monte Carlo simulation is illustrated in Figure \ref{fig:convergence}. Despite some discrepancies, a general downward trend in the absolute error is observed as the number of simulations increase, indicating that the prices eventually converge towards the analytical solution which is expected due to the law of large numbers.
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{loglogaxis}[
+            xlabel={Number of Simulations},
+            ylabel={Absolute Error},
+            title={Absolute Error vs Number of Simulations},
+            grid=both,
+            mark size=2pt,
+            legend style={
+                at={(1.05,1)},
+                anchor=north west
+            },
+            legend cell align={left}
+        ]
+        \addplot[
+            color=blue,
+            mark=*,
+        ]
+        table[
+            x={Simulations},
+            y={Error},
+            col sep=comma
+        ] {csv/benchmark_errors.csv};
+
+        \end{loglogaxis}
+    \end{tikzpicture}
+    \caption{Absolute Error vs Number of Simulations}
+    \label{fig:convergence}
+\end{figure}
+
 \section{Comparison of Numerical Methods}\label{sec:comparison_numerical_methods}
+Using the same parameters from the previous sections, the results of each numerical method can be compared against each other to validate the accuracy of the solvers. The table of results in \ref{tab:comparison-explicit-cn} shows the absolute error between the \textit{explicit} and \textit{Crank-Nicolson} methods over a range of dimensions. 
+
+
+\textbf{(Option Type: Call, Initial Stock Price $S_0 = 300$, Strike Price $K = 100$, Risk-free Rate $r = 0.05$, Volatility $\sigma = 0.2$, Expiry $T = 1$)}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}
+        { |c|c|c| }
+        \hline
+        \textbf{$N_s$} & \textbf{$N_t$} & \textbf{Absolute Error between Explicit and Crank-Nicolson (3 s.f.)} \\ \hline
+            10 & 100 & 0.00451 \\ \hline
+            50 & 1000 & 0.00279 \\ \hline
+            100 & 1000 & 0.00502 \\ \hline
+            100 & 10000 & 0.000498 \\ \hline
+            100 & 50000 & 0.0000996 \\ \hline
+            1000 & 50000 & 0.00105 \\ \hline
+            1000 & 100000 & 0.000520 \\ \hline
+    \end{tabular}
+    \caption{Absolute Error between Explicit and Crank-Nicolson}
+    \label{tab:comparison-explicit-cn}
+\end{table}
+
+Looking at these results, the absolute error between the two solvers appears to converge towards zero as the grid dimensions become increasingly fine. This behaviour suggests that both methods are consistent with one another and validates the correctness of the numerical methods used. However, this increase in accuracy comes with a trade-off in terms of computational time due to the increasing number of calculations required. As mentioned earlier in Section \ref{sec:speedup_analysis}, the \textit{Crank-Nicolson} method is expected to be more computationally expensive than the \textit{explicit} method due to the additional calculations required to solve the system of linear equations. 
+
+% To address this computational cost, the GPU-accelerated implementations of the solvers were introduced to offload the most computationally intensive operations to the GPU. 
+Here, we compare the GPU-accelerated solvers against their CPU counterparts to evaluate the correctness of the GPU implementations. The results of the absolute error between the GPU and CPU implementations are shown in Table \ref{tab:comparison-cpu-gpu}.
+
+\begin{table}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tabular}{ |c|c|c| }
+            \hline
+            \textbf{$N_s$} & \textbf{$N_t$} & \textbf{Abs. Error (3 s.f.)} \\ \hline
+            101 & 1001 & 0.000500 \\ \hline
+            101 & 10001 & 0.000500 \\ \hline
+            100 & 50000 & 0.000500 \\ \hline
+            1001 & 50001 & 0.000500 \\ \hline
+        \end{tabular}
+        \caption{\textbf{Explicit}}
+        \label{tab:comparison-cpu-gpu-explicit}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tabular}{ |c|c|c| }
+            \hline
+            \textbf{$N_s$} & \textbf{$N_t$} & \textbf{Abs. Error (3 s.f.)} \\ \hline
+            101 & 1001 & 0.000500 \\ \hline
+            101 & 10001 & 0.000500 \\ \hline
+            101 & 50001 & 0.000500 \\ \hline
+            1001 & 50001 & 0.000500 \\ \hline
+        \end{tabular}
+        \caption{\textbf{Crank-Nicolson}}
+        \label{tab:comparison-cpu-gpu-cn}
+    \end{minipage}
+    \caption{Absolute Error between CPU and GPU}
+    \label{tab:comparison-cpu-gpu}
+\end{table}
+
+These results show that the absolute error between the CPU and GPU implementations is consistently low, indicating that the GPU implementations are producing results that are consistent with their CPU counterparts. This suggests that the parallelised computations on the GPU do not compromise the accuracy of the numerical results despite the increased computational speed. This consistency validates the correctness of the GPU-accelerated solvers and confirms that the integrity of the numerical methods is preserved.
+
+\subsubsection{Accuracy of Interpolated Solutions}
+
+Additionally, the accuracy of the interpolated solutions was evaluated by comparing the maximum absolute differences (errors) of the coarse and fine grid solutions as shown in Table \ref{tab:interpolation-error}.
+
+\begin{table}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Coarse} & \textbf{Fine} & \makecell{\textbf{Max Abs.}\\\textbf{Error (5 s.f.)}} \\
+            \hline
+            $101 \times 1001$ & $101 \times 2001$ & 0.021715 \\ \hline
+            $101 \times 1001$ & $201 \times 4001$ & 0.51812 \\ \hline
+            $101 \times 8001$ & $301 \times 4001$ & 0.063388 \\ \hline
+            $201 \times 4001$ & $101 \times 10001$ & 0.50181 \\ \hline
+            $101 \times 4001$ & $201 \times 10001$ & 0.50452 \\ \hline
+        \end{tabular}
+        \subcaption{\textbf{Explicit}}
+        \label{tab:interpolation-explicit}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Coarse} & \textbf{Fine} & \makecell{\textbf{Max Abs.}\\\textbf{Error (5 s.f.)}} \\
+            \hline
+            $101 \times 1001$ & $101 \times 2001$ & 0.021707 \\ \hline
+            $101 \times 1001$ & $201 \times 4001$ & 0.51794 \\ \hline
+            $101 \times 8001$ & $301 \times 4001$ & 0.062640 \\ \hline
+            $201 \times 4001$ & $101 \times 10001$ & 0.50181 \\ \hline
+            $101 \times 4001$ & $201 \times 10001$ & 0.50452 \\ \hline
+        \end{tabular}
+        \subcaption{\textbf{Crank-Nicolson}}
+        \label{tab:interpolation-cn}
+    \end{minipage}
+    \caption{Absolute error between interpolated coarse and fine grid solutions.}
+    \label{tab:interpolation-error}
+\end{table}
+
+\subsubsection{Testing against Analytical Solution}
+As a standard benchmark, the solvers were tested against the analytical solution of the Black-Scholes equation to further validate the accuracy of the numerical methods. 
+
+\begin{table}[H]
+    \centering
+    \caption{Model Parameters for Numerical Experiments}
+    \label{tab:model-parameters}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Parameter} & \textbf{Symbol} & \textbf{Finite Difference Methods} & \textbf{Monte Carlo} \\
+        \midrule
+        Initial Stock Price & $S_0$ & 300 & 300 \\
+        Strike Price & $K$ & 100 & 100 \\
+        Risk-free Rate & $r$ & 0.05 & 0.05 \\
+        Volatility & $\sigma$ & 0.2 & 0.2 \\
+        Expiry & $T$ & 1 & 1 \\
+        Spatial Nodes & $N_s$ & 100 & -- \\
+        Time Nodes & $N_t$ & 2000 & -- \\
+        Time Steps & $\tau$ & -- & 365 \\
+        Number of Simulations & -- & -- & 100,000 \\
+        Random Seed & -- & -- & 42 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}
+        { |c|c|c|c| }
+        \hline
+        \textbf{Analytical Solution} & \textbf{Explicit} & \textbf{Crank-Nicolson} & \textbf{Monte-Carlo Price} \\ \hline
+        204.8770575757042 & 204.8770575499286 & 204.8770575499286 & 204.73167692582822\\ \hline
+    \end{tabular}
+    \caption{Comparison between Analytical and Numerical Solutions}
+    \label{tab:comparison-of-option-prices}
+\end{table}
+
+Table \ref{tab:comparison-of-option-prices} shows that the \textit{Explicit} and \textit{Crank-Nicolson} methods yield numerical solutions that are approximately close to the analytical solution, differing only at a small magnitude of $2.578 \times 10^{-8}$. This demonstrates the level of accuracy and reliability the finite difference methods can achieve when solving the Black-Scholes equation. Contrastly, the Monte Carlo simulations approximates the option price at a slight deviation of $0.1453806498758$ from the analytical solution. This discrepancy is expected due to the stochastic nature of the Monte Carlo method, which relies on random sampling to estimate the option price. While not as precise as the finite difference methods, the Monte Carlo method remains within an acceptable range to provide a reasonable approximation of the option price. This, however, can only be achieved when using a sufficiently large number of simulations, as shown in Figure \ref{fig:convergence}. 
+
 

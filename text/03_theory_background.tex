@@ -325,7 +325,7 @@ which is equivalent to
 \begin{align}
     d(\log S_t) 
     {}={}& \frac{\partial \log S_t}{\partial t} dt + \frac{\partial \log S_t}{\partial t} dS_t + \frac{1}{2} \frac{\partial^2 \log S_t}{\partial S_t^2} (dS_t)^2 \notag\\
-    {}={}& \frac{1}{S_t} dS_t - \frac{1}{2} (\frac{1}{{S_t}^2}) (dS_t)^2. \label{eq:ito-gbm}
+    {}={}& \frac{1}{S_t} dS_t - \frac{1}{2} \frac{1}{{S_t}^2} (dS_t)^2. \label{eq:ito-gbm}
 \end{align}
 Using the SDE in equation \eqref{eq:gbm} for $S_t$ under the assumption of GBM, we can compute the $(dS_t)^2$ term to get
 \begin{equation}
@@ -339,7 +339,7 @@ Integrating both sides of the equation using $\beta = \mu - \frac{1}{2} \sigma^2
 \begin{equation}
     \log S_t = \log S_0 + (\mu - \frac{1}{2} \sigma^2) t + \sigma B_t, \label{eq:log-gbm}
 \end{equation}
-which is otherwise known as
+which is otherwise written as
 \begin{equation}
     S_t = S_0 e^{(\beta t + \sigma B_t)}. \label{eq:gbm-solution}
 \end{equation}
@@ -348,7 +348,7 @@ which is otherwise known as
 Here, it is observed that the solution \eqref{eq:gbm-solution} to the \textit{Geometric Brownian motion} SDE is described by a lognormal distribution. From equation \eqref{eq:ito-gbm-simplified}, 
 the constant drift rate $\mu - \frac{1}{2} \sigma^2$ and volatility $\sigma$ indicate that $Y_t = \log S_t$ follows a Brownian motion with drift. This implies that the change in $\log S_t$ is normally distributed, with the distribution given by
 \begin{equation}
-    \log S_t \sim N[ \log S_0 + (\mu - \frac{1}{2} \sigma^2)t, \sigma^2 t].
+    \log S_t \sim \mathcal{N}[ \log S_0 + (\mu - \frac{1}{2} \sigma^2)t, \sigma^2 t].
 \end{equation}
 
 \subsubsection{Markov property}
@@ -433,7 +433,7 @@ exposure to uncertainty due to randomness in the underlying asset price. The ass
 \end{equation}
 Substituting equations \eqref{eq:portfolio} and \eqref{eq:change-in-portfolio}into the equation above gives
 \begin{equation}
-    \cancel{-}(\frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}) \cancel{dt} = \cancel{-}r (V - \frac{\partial V}{\partial S}) \cancel{dt},
+    \cancel{-}(\frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}) dt = \cancel{-}r (V - \frac{\partial V}{\partial S}) dt,
 \end{equation}
 which leaves us with the Black-Scholes PDE
 \begin{equation}
@@ -460,6 +460,9 @@ Similarly, for \textit{European put} options, we have
 In a delta-hedging strategy, the portfolio is continuously rebalanced to maintain a delta-neutral position. This approach relies on a set of risk measures known as 
 the \textit{Greeks} which assesses the sensitivity of the option price to various factors, such as changes in the asset price, time, or volatility. 
 
+The sample plots of the Greeks will be generated based on the parameters: 
+\textbf{(Initial Stock Price $S_0 = 300$, Strike Price $K = 100$, Risk-free Rate $r = 0.05$, Volatility $\sigma = 0.2$, Expiry $T = 1$, Spatial Nodes $N_s = 100$, and Time Nodes  $N_t = 1000$)}
+
 \subsubsection{Delta}
 The \textit{delta} of an option (or a portfolio of options) is described by the rate of change of the option price w.r.t the underlying asset price. Mathematically, the delta is defined as
 \begin{equation}
@@ -472,7 +475,7 @@ This portfolio is \textit{delta-neutral} (i.e., delta is \textit{zero}) due to t
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            width=0.8\textwidth,
+            width=0.6\textwidth,
             xlabel={Stock Price (S)},
             ylabel={Delta},
             grid=both,
@@ -509,15 +512,12 @@ The \textit{theta} ($\Theta$) is described by the rate of change of the option p
 \begin{equation}
     \Theta = \frac{\partial V}{\partial t}.
 \end{equation}
-In other words, it measures the sensitivity of the option price as it approaches the time to expiry. Theta is typically \textbf{negative} due to the time decay effect of options, where the value of an option becomes less valuable over time. 
-While delta can be used for hedging (since it reflects changes in the underlying asset's price), theta is not necessarily hedged. This is because time decay is a deterministic process, and there is no
-uncertainty in the time to expiry. 
 
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            width=0.8\textwidth,
+            width=0.6\textwidth,
             xlabel={Stock Price (S)},
             ylabel={Theta},
             grid=both,
@@ -550,8 +550,13 @@ uncertainty in the time to expiry.
     \label{fig:theta-plot}
 \end{figure}
 
+In other words, it measures the sensitivity of the option price as it approaches the time to expiry. Theta is typically \textbf{negative} for call options due to the time decay effect of options, where the value of an option becomes less valuable over time. 
+While delta can be used for hedging (since it reflects changes in the underlying asset's price), theta is not necessarily hedged. This is because time decay is a deterministic process and there is no
+uncertainty in the time to expiry. 
+
+
 \subsubsection{Gamma}
-The \textit{gamma} ($\Gamma$) of an option (or a portfolio of options) is described by the rate of change of the delta with respect to the price of the underlying asset. Mathematically, gamma is defined as
+The \textit{gamma} ($\Gamma$) of an option (or a portfolio of options) is described by the rate of change of the delta with respect to the price of the underlying asset. Gamma is defined as
 \begin{equation}
     \Gamma = \frac{\partial^2 V}{\partial S^2}.
 \end{equation}
@@ -562,7 +567,7 @@ that the delta remains relatively stable, and thus the portfolio would not requi
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-            width=0.8\textwidth,
+            width=0.6\textwidth,
             xlabel={Stock Price (S)},
             ylabel={Gamma},
             grid=both,

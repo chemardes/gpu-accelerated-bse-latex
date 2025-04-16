@@ -31,11 +31,22 @@ The software is structured into two main libraries: the Python-based solvers and
     \item \textbf{GPUSolver:} The GPU-accelerated library is designed to optimise the performance of the numerical methods implemented in the PDESolvers library by leveraging GPU parallelisation. These solvers take advantage of the CUDA architecture to accelerate the computationally-intensive parts of the calculation, resulting in significant speed-ups compared to the CPU-based implementation of the same methods.
 \end{itemize}
 
-\input{text/uml_class.tex}
 
+\clearpage 
+\begin{landscape}
+    \begin{figure}[H]
+        \centering
+        \input{./text/uml_class.tex}
+        \caption{UML Class Diagram of the \textbf{pdesolvers} Python library}
+        \label{fig:uml_class}
+    \end{figure}
+\end{landscape}
+\clearpage
 
 \section{Testing and Reliability} \label{sec:software_testing}
 The software has undergone comprehensive testing to verify its correctness and functionality. These tests include checks for boundary conditions, initial conditions and performance benchmarks to ensure that the numerical methods produce accurate and reliable results. To streamline the development process, a CI/CD pipeline has been established using GitHub Actions. This automated pipeline runs tests whenever any changes are pushed to the main branch, ensuring that new feature additions or modifications do not introduce bugs or errors to the software. Code coverage is also monitored to ensure that the tests do not miss any critical parts of the code, providing confidence in the reliability of the software.
+
+For Quality Assurance (QA), pull requests and code reviews were conducted throughout the development of the software. This process involved peer reviews of the code changes, ensuring that the code adheres to best practices and do not break existing functionality.
 
 \subsection{Testing Details}
 The testing framework used in this project is \textit{pytest}, which is a widely-used testing framework for Python. The tests are designed to cover various aspects of the software, including:
@@ -43,3 +54,4 @@ The testing framework used in this project is \textit{pytest}, which is a widely
     \item \textbf{Unit Tests:} These tests validate individual components of the software, ensuring that each function and method behaves as expected. Specifically, they verify that the boundary and initial conditions of the numerical methods are correctly implemented, checking that appropriate constraints are applied throughout the calculations. The tests also include validation for incorrect or unsupported inputs, raising appropriate exceptions to prevent runtime errors.
     \item \textbf{Integration Tests:} Integration tests check the interaction between multiple components of the software to ensure they work correctly. For this instance, the tests focused on comparing the results of different solvers, verifying the approximated solutions against their analytical counterparts, and simulating specific behaviour via mock data. These were particularly done by testing the convergence of the numerical methods from the absolute differences of the approximated solutions or interpolated solutions. Additionally, the Monte Carlo simulations were validated by using mocked data to simulate specific scenarios, ensuring that the simulation produced expected results. 
 \end{itemize}
+
